@@ -1,30 +1,65 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  onAuthStateChanged,
+  signOut as firebaseSignOut,
+  type User,
+} from "firebase/auth";
 import type { AuthProviderProps } from "@/auth/AuthProvider/AuthProvider.types";
-import { clearSession, readSession, writeSession } from "@/auth/session/session";
 import type { AuthUser } from "@/auth/session/session.types";
 import { AuthContext } from "@/auth/useAuth/useAuth.constants";
 import type { AuthContextValue } from "@/auth/useAuth/useAuth.types";
+import { getFirebaseAuth, isFirebaseConfigured } from "@/lib/firebase";
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<AuthUser | null>(readSession);
-  const value = useMemo(() => createAuthValue(user, setUser), [user]);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isReady, setIsReady] = useState(() => !isFirebaseConfigured());
+  useFirebaseSession(setUser, setIsReady);
+  const value = useMemo(
+    () => createAuthValue(user, isReady, setUser),
+    [user, isReady],
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+function useFirebaseSession(
+  setUser: (user: AuthUser | null) => void,
+  setIsReady: (ready: boolean) => void,
+) {
+  useEffect(() => {
+    if (!isFirebaseConfigured()) return;
+    return onAuthStateChanged(getFirebaseAuth(), (next) => {
+      setUser(mapFirebaseUser(next));
+      setIsReady(true);
+    });
+  }, [setUser, setIsReady]);
+}
+
+function mapFirebaseUser(user: User | null): AuthUser | null {
+  const phoneNumber = user?.phoneNumber;
+  if (!user || !phoneNumber) return null;
+  return { phoneNumber, uid: user.uid };
+}
+
 function createAuthValue(
   user: AuthUser | null,
+  isReady: boolean,
   setUser: (user: AuthUser | null) => void,
 ): AuthContextValue {
   return {
     user,
+    isReady,
     signIn: (next) => {
-      writeSession(next);
       setUser(next);
     },
     signOut: () => {
-      clearSession();
       setUser(null);
+      void signOutOfFirebase();
     },
   };
+}
+
+function signOutOfFirebase() {
+  if (!isFirebaseConfigured()) return;
+  return firebaseSignOut(getFirebaseAuth());
 }

@@ -8,7 +8,9 @@ export type CodeFormProps = {
   onSuccess: (user: AuthUser) => void;
 };
 
-export type CodeFieldProps = {
+export type OtpFieldProps = {
   code: string;
+  error: string;
+  isDisabled: boolean;
   onChange: (value: string) => void;
 };

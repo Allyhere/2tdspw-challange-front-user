@@ -20,11 +20,11 @@ export function formatSentAt(iso: string): string {
 
 export function formatPlanRecurrence(item: TreatmentItem): string {
   if (item.planRecurrency !== "recurrent" || !item.planRecurrencyRate) {
-    return "Dose única";
+    return "única";
   }
   return (
     recurrenceLabels[item.planRecurrencyRate] ??
-    `A cada ${item.planRecurrencyRate} meses`
+    `a cada ${item.planRecurrencyRate} meses`
   );
 }
 

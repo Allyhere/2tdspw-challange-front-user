@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { PendingSession } from "@/auth/PendingSession/PendingSession";
 import type { PhoneConfirmation } from "@/auth/phoneAuth/phoneAuth.types";
 import { useAuth } from "@/auth/useAuth/useAuth";
 import { usePageTitle } from "@/lib/usePageTitle";
@@ -7,13 +8,14 @@ import { CodeForm } from "@/pages/login/CodeForm/CodeForm";
 import { PhoneForm } from "@/pages/login/PhoneForm/PhoneForm";
 
 export function LoginPage() {
-  const { user, signIn } = useAuth();
+  const { user, isReady, signIn } = useAuth();
   const [confirmation, setConfirmation] = useState<PhoneConfirmation | null>(
     null,
   );
   const [phoneNumber, setPhoneNumber] = useState("");
   usePageTitle("Entrar | Veti");
 
+  if (!isReady) return <PendingSession />;
   if (user) return <Navigate to="/home" replace />;
 
   function handleCodeSent(next: PhoneConfirmation, phone: string) {
@@ -29,6 +31,9 @@ export function LoginPage() {
         </h1>
         <p className="mt-sm font-roboto text-body text-pretty text-text-primary">
           Use o celular cadastrado na clínica para receber um código.
+        </p>
+        <p className="mt-sm font-roboto text-body text-pretty text-text-primary">
+          Você pode receber um SMS e a operadora pode cobrar tarifas.
         </p>
         <div className="mt-xl">
           {confirmation ? (

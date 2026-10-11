@@ -8,6 +8,9 @@
   --color-action-blue: #0096de;
   --color-whatsapp-bg: #d3ffc8;
   --color-danger: #b3261e;
+  --color-price: #e8357a;
+  --color-remove: #fa5f5f;
+  --color-remove-surface: #ffdfdf;
   --color-text-secondary: #9da3a7;
   --color-dark-neutral: #2c2c2c;
   --color-surface-base: #ffffff;
@@ -52,7 +55,10 @@
   --spacing-md: 0.75rem;
   --spacing-lg: 1rem;
   --spacing-xl: 1.5rem;
+  --spacing-icon: 1.125rem;
+  --spacing-icon-button: 2.25rem;
   --spacing-touch: 2.75rem;
+  --spacing-logo: 2rem;
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -60,6 +66,7 @@
   --radius-full: 100px;
 
   --shadow-subtle: 0 1px 3px rgb(30 9 48 / 0.06);
+  --shadow-card: 0 4px 8px -2px rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.05);
   --shadow-floating: 0 4px 12px rgb(113 33 165 / 0.12);
 
   --container-shell: 40rem;
@@ -76,4 +83,24 @@ html {
 
 body {
   min-height: 100vh;
+}
+
+@utility hit-target {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--spacing-xs) * -1);
+  }
+}
+
+@utility transition-press {
+  transition-property: opacity, scale;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@utility scale-press {
+  scale: 0.96;
 }

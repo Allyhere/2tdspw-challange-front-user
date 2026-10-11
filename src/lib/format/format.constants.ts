@@ -1,6 +1,6 @@
 export const recurrenceLabels: Record<number, string> = {
-  1: "Mensal",
-  3: "Trimestral",
-  6: "Semestral",
-  12: "Anual",
+  1: "mensal",
+  3: "trimestral",
+  6: "semestral",
+  12: "anual",
 };
