@@ -121,7 +121,6 @@ function PhoneField({ phone, onChange }: PhoneFieldProps) {
       value={phone}
       onChange={onChange}
       isRequired
-      validationBehavior="aria"
       validate={validatePhone}
       className="flex flex-col gap-xs"
     >
