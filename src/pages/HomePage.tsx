@@ -6,23 +6,26 @@ import { useAuth } from "@/auth/useAuth/useAuth";
 import type { TutorPet } from "@/auth/session/session.types";
 import { clinicMessages } from "@/data/clinicChat/clinicChat.constants";
 import { CARE_PLAN_STALE_TIME } from "@/data/owner/owner.constants";
-import { fetchTreatmentPlan } from "@/data/owner/owner";
+import { fetchSignedInOwner, fetchTreatmentPlan, mergeTutor } from "@/data/owner/owner";
 import { usePageTitle } from "@/lib/usePageTitle";
 import { HomeTreatment } from "@/pages/HomeTreatment";
 
 export function HomePage() {
   usePageTitle("Plano de tratamento | Veti");
   const { user, isReady } = useAuth();
-  const pets = user?.pets ?? [];
+  const ownerQuery = useOwnerProfile(user?.uid, isReady);
+  const tutor = mergeTutor(user, ownerQuery.data);
+  const pets = tutor?.pets ?? [];
   const selection = usePetSelection(pets);
-  const planQuery = useCarePlan(selection.pet?.id, isReady);
+  const planQuery = useCarePlan(selection.pet?.id, ownerQuery.isSuccess);
 
   return (
     <>
       <AppHeader />
       <main className="mx-auto flex w-full max-w-shell flex-col gap-xl px-lg py-xl">
         <HomeTreatment
-          tutor={user}
+          tutor={tutor}
+          ownerQuery={ownerQuery}
           pet={selection.pet}
           pets={pets}
           selectedPetId={selection.pet?.id ?? ""}
@@ -33,6 +36,15 @@ export function HomePage() {
       </main>
     </>
   );
+}
+
+function useOwnerProfile(uid: string | undefined, isReady: boolean) {
+  return useQuery({
+    queryKey: ["owner-profile", uid],
+    queryFn: fetchSignedInOwner,
+    enabled: isReady && uid !== undefined,
+    staleTime: CARE_PLAN_STALE_TIME,
+  });
 }
 
 function usePetSelection(pets: TutorPet[]) {

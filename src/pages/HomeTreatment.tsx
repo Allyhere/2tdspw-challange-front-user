@@ -1,6 +1,7 @@
 import { Button } from "react-aria-components";
 import { PetChooser } from "@/components/PetChooser/PetChooser";
 import { PetHeader } from "@/components/PetHeader/PetHeader";
+import { PlanSkeleton, ProfileSkeleton } from "@/components/Skeleton/Skeleton";
 import { TreatmentPlan } from "@/components/TreatmentPlan/TreatmentPlan";
 import { TutorSummary } from "@/components/TutorSummary/TutorSummary";
 import { toPet } from "@/data/owner/owner";
@@ -8,6 +9,7 @@ import { isNotFound } from "@/lib/api/api.types";
 import type {
   LoadErrorProps,
   HomeTreatmentProps,
+  OwnerStatusProps,
   PlanBodyProps,
   StatusMessageProps,
 } from "@/pages/HomeTreatment.types";
@@ -17,19 +19,29 @@ const statusClass = "font-inter text-body text-pretty text-text-primary";
 
 export function HomeTreatment({
   tutor,
+  ownerQuery,
   pet,
   pets,
   selectedPetId,
   onSelectPet,
   planQuery,
 }: HomeTreatmentProps) {
-  if (!pet) {
+  if (ownerQuery.isLoading) {
+    return <ProfileSkeleton />;
+  }
+  if (isNotFound(ownerQuery.error)) {
+    return <OwnerStatus tutor={tutor} message="Nenhum pet encontrado." />;
+  }
+  if (ownerQuery.isError) {
     return (
-      <>
-        {tutor ? <TutorSummary tutor={tutor} /> : null}
-        <StatusMessage>Nenhum pet encontrado.</StatusMessage>
-      </>
+      <LoadError
+        message="Não foi possível carregar seus dados."
+        onRetry={() => void ownerQuery.refetch()}
+      />
     );
+  }
+  if (!pet) {
+    return <OwnerStatus tutor={tutor} message="Nenhum pet encontrado." />;
   }
 
   return (
@@ -45,17 +57,31 @@ export function HomeTreatment({
 }
 
 function PlanBody({ planQuery }: PlanBodyProps) {
-  if (planQuery.isPending) {
-    return <StatusMessage>Carregando plano de tratamento…</StatusMessage>;
+  if (planQuery.isLoading) {
+    return <PlanSkeleton />;
   }
   if (isNotFound(planQuery.error)) {
     return <StatusMessage>Este pet ainda não tem plano de tratamento.</StatusMessage>;
   }
   if (planQuery.isError) {
-    return <LoadError onRetry={() => void planQuery.refetch()} />;
+    return (
+      <LoadError
+        message="Não foi possível carregar o plano."
+        onRetry={() => void planQuery.refetch()}
+      />
+    );
   }
   if (!planQuery.data) return null;
   return <TreatmentPlan plan={planQuery.data} />;
+}
+
+function OwnerStatus({ tutor, message }: OwnerStatusProps) {
+  return (
+    <>
+      {tutor ? <TutorSummary tutor={tutor} /> : null}
+      <StatusMessage>{message}</StatusMessage>
+    </>
+  );
 }
 
 function StatusMessage({ children }: StatusMessageProps) {
@@ -66,10 +92,10 @@ function StatusMessage({ children }: StatusMessageProps) {
   );
 }
 
-function LoadError({ onRetry }: LoadErrorProps) {
+function LoadError({ message, onRetry }: LoadErrorProps) {
   return (
     <div className="flex flex-col items-start gap-md">
-      <p className={statusClass}>Não foi possível carregar o plano.</p>
+      <p className={statusClass}>{message}</p>
       <Button type="button" className={secondaryButtonClass} onPress={onRetry}>
         Tentar de novo
       </Button>

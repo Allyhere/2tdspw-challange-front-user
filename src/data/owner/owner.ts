@@ -1,7 +1,28 @@
 import { z } from "zod";
-import type { TutorPet } from "@/auth/session/session.types";
+import type { AuthUser, TutorPet } from "@/auth/session/session.types";
 import { apiGet } from "@/lib/api/api";
 import type { Pet, TreatmentPlanData } from "@/data/treatment/treatment.types";
+
+const petSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  breed: z.string(),
+  sex: z.enum(["M", "F"]),
+  weight: z.number(),
+  age: z.number(),
+  isCastrated: z.boolean(),
+  species: z.string(),
+});
+
+const ownerSchema = z.object({
+  name: z.string(),
+  email: z.string(),
+  telephone: z.string(),
+  document: z.string(),
+  pets: z.array(petSchema),
+});
+
+export type OwnerProfile = z.infer<typeof ownerSchema>;
 
 const appointmentSchema = z.object({
   id: z.string(),
@@ -22,6 +43,26 @@ export function toPet(pet: TutorPet): Pet {
     isCastrated: pet.isCastrated,
     weightKg: pet.weight,
     ageYears: pet.age,
+  };
+}
+
+export function fetchSignedInOwner(): Promise<OwnerProfile> {
+  return apiGet("/owner/me", ownerSchema);
+}
+
+export function mergeTutor(
+  user: AuthUser | null,
+  owner: OwnerProfile | undefined,
+): AuthUser | null {
+  if (!user) return null;
+  if (!owner) return user;
+  return {
+    ...user,
+    name: owner.name,
+    email: owner.email,
+    document: owner.document,
+    phoneNumber: owner.telephone || user.phoneNumber,
+    pets: owner.pets,
   };
 }
 

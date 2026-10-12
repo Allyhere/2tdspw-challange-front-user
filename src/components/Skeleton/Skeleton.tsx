@@ -1,0 +1,75 @@
+import type {
+  BoneProps,
+  CenteredLinesProps,
+  LoadingStatusProps,
+} from "@/components/Skeleton/Skeleton.types";
+
+const boneClass =
+  "block animate-pulse rounded-sm bg-image-placeholder motion-reduce:animate-none";
+
+export function ProfileSkeleton() {
+  return (
+    <LoadingStatus label="Carregando seus dados…">
+      <CenteredLines titleClass="w-1/2" detailClass="w-2/3" />
+      <CenteredLines titleClass="w-2/5" detailClass="w-1/2" />
+      <PlanSkeletonBody />
+    </LoadingStatus>
+  );
+}
+
+export function PlanSkeleton() {
+  return (
+    <LoadingStatus label="Carregando plano de tratamento…">
+      <PlanSkeletonBody />
+    </LoadingStatus>
+  );
+}
+
+function LoadingStatus({ label, children }: LoadingStatusProps) {
+  return (
+    <div role="status" aria-live="polite" aria-busy="true" className="flex flex-col gap-xl">
+      <p className="sr-only">{label}</p>
+      {children}
+    </div>
+  );
+}
+
+function CenteredLines({ titleClass, detailClass }: CenteredLinesProps) {
+  return (
+    <div aria-hidden="true" className="flex flex-col items-center gap-xs">
+      <Bone className={`h-xl ${titleClass}`} />
+      <Bone className={`h-lg ${detailClass}`} />
+    </div>
+  );
+}
+
+function PlanSkeletonBody() {
+  return (
+    <div aria-hidden="true" className="flex flex-col gap-md">
+      <Bone className="h-xl w-1/2" />
+      <Bone className="h-lg w-full" />
+      <Bone className="h-lg w-5/6" />
+      <div className="flex flex-col gap-sm">
+        <PlanCardSkeleton />
+        <PlanCardSkeleton />
+        <PlanCardSkeleton />
+      </div>
+    </div>
+  );
+}
+
+function PlanCardSkeleton() {
+  return (
+    <div className="flex items-center gap-md rounded-md bg-surface-subtle px-lg pt-sm pb-md shadow-card">
+      <div className="flex min-w-0 flex-1 flex-col gap-xs">
+        <Bone className="h-lg w-2/3" />
+        <Bone className="h-lg w-1/3" />
+      </div>
+      <Bone className="h-lg w-1/5" />
+    </div>
+  );
+}
+
+function Bone({ className }: BoneProps) {
+  return <span className={`${boneClass} ${className}`} />;
+}
