@@ -1,6 +1,5 @@
 import type { TutorSummaryProps } from "@/components/TutorSummary/TutorSummary.types";
-import { formatCpf } from "@/lib/format/format";
-import { formatPhone } from "@/lib/phone/phone";
+import { tutorDetails } from "@/utils/tutorDetails";
 
 export function TutorSummary({ tutor }: TutorSummaryProps) {
   const details = tutorDetails(tutor);
@@ -19,11 +18,4 @@ export function TutorSummary({ tutor }: TutorSummaryProps) {
       ) : null}
     </section>
   );
-}
-
-function tutorDetails(tutor: TutorSummaryProps["tutor"]): string {
-  const phone = tutor.phoneNumber ? formatPhone(tutor.phoneNumber) : "";
-  return [tutor.email, phone, formatCpf(tutor.document)]
-    .filter((part) => part.length > 0)
-    .join(" · ");
 }

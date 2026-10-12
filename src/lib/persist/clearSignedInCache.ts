@@ -1,5 +1,5 @@
+import { del } from "idb-keyval";
 import { queryClient } from "@/lib/queryClient";
-import { clearSelectedPetId } from "@/lib/persist/selectedPet";
 import { queryPersister, sealQueryCache } from "@/lib/persist/queryCache";
 
 export async function clearSignedInCache(uid: string | undefined): Promise<void> {
@@ -8,5 +8,5 @@ export async function clearSignedInCache(uid: string | undefined): Promise<void>
   await queryClient.removeQueries({ queryKey: ["treatment-plan"] });
   await queryPersister.removeClient();
   if (!uid) return;
-  await clearSelectedPetId(uid);
+  await del(`selected-pet:${uid}`);
 }

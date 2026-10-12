@@ -3,7 +3,7 @@ import type {
   ChatPreviewProps,
   ConversationLinkProps,
 } from "@/components/ChatPreview/ChatPreview.types";
-import { formatSentAt } from "@/lib/format/format";
+import { formatDateTime } from "@/lib/format/format";
 import { previewLinkClass } from "@/styles/controls/controls.constants";
 
 export function ChatPreview({ messages }: ChatPreviewProps) {
@@ -41,7 +41,7 @@ function ConversationLink({ message }: ConversationLinkProps) {
         className="font-inter text-caption text-text-primary"
         dateTime={message.sentAt}
       >
-        {formatSentAt(message.sentAt)}
+        {formatDateTime(message.sentAt)}
       </time>
     </Link>
   );

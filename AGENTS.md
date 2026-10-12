@@ -21,3 +21,11 @@ Never use arbitrary bracket values such as `bg-[#8B3FBF]`, `w-[365px]`, or `p-[1
 Use semantic HTML and aim for WCAG AA. Interactive controls come from `react-aria-components`, not raw `button`, `input`, or `a`.
 
 The commit hook runs `npm run lint` and `npm run a11y` (`@axe-core/cli` against the preview server).
+
+## Components
+
+Never create a component that returns only a styled element. Write the element at the call site.
+
+## Utilities
+
+Write a single-line helper at the call site. Put any longer helper in `src/utils`.

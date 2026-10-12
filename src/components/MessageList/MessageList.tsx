@@ -3,7 +3,7 @@ import type {
   MessageBubbleProps,
   MessageListProps,
 } from "@/components/MessageList/MessageList.types";
-import { formatSentAt } from "@/lib/format/format";
+import { formatDateTime } from "@/lib/format/format";
 
 export function MessageList({ messages }: MessageListProps) {
   if (messages.length === 0) {
@@ -39,7 +39,7 @@ function MessageBubble({ message }: MessageBubbleProps) {
           className="mt-xs block font-inter text-caption text-text-primary"
           dateTime={message.sentAt}
         >
-          {formatSentAt(message.sentAt)}
+          {formatDateTime(message.sentAt)}
         </time>
       </article>
     </li>

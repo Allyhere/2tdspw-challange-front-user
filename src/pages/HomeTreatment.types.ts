@@ -23,10 +23,6 @@ export type PlanBodyProps = {
   planQuery: UseQueryResult<TreatmentPlanData>;
 };
 
-export type StatusMessageProps = {
-  children: string;
-};
-
 export type LoadErrorProps = {
   message: string;
   onRetry: () => void;

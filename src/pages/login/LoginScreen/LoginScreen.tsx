@@ -1,4 +1,4 @@
-import { LoginBrand } from "@/pages/login/LoginPanel/LoginBrand";
+import vetiLogo from "@/assets/veti-logo.png";
 import { LoginPanel } from "@/pages/login/LoginPanel/LoginPanel";
 import type { LoginScreenProps } from "@/pages/login/LoginScreen/LoginScreen.types";
 
@@ -25,7 +25,7 @@ function LoginFormColumn({ children }: LoginScreenProps) {
 function LoginCopy() {
   return (
     <div className="flex flex-col gap-md">
-      <LoginBrand />
+      <img src={vetiLogo} alt="Veti" className="h-logo self-start" />
       <h1 className="font-inter text-heading-1 text-balance text-text-primary">
         Entrar
       </h1>

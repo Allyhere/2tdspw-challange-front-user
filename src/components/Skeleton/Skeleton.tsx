@@ -1,5 +1,4 @@
 import type {
-  BoneProps,
   CenteredLinesProps,
   LoadingStatusProps,
 } from "@/components/Skeleton/Skeleton.types";
@@ -37,8 +36,8 @@ function LoadingStatus({ label, children }: LoadingStatusProps) {
 function CenteredLines({ titleClass, detailClass }: CenteredLinesProps) {
   return (
     <div aria-hidden="true" className="flex flex-col items-center gap-xs">
-      <Bone className={`h-xl ${titleClass}`} />
-      <Bone className={`h-lg ${detailClass}`} />
+      <span className={`${boneClass} h-xl ${titleClass}`} />
+      <span className={`${boneClass} h-lg ${detailClass}`} />
     </div>
   );
 }
@@ -46,9 +45,9 @@ function CenteredLines({ titleClass, detailClass }: CenteredLinesProps) {
 function PlanSkeletonBody() {
   return (
     <div aria-hidden="true" className="flex flex-col gap-md">
-      <Bone className="h-xl w-1/2" />
-      <Bone className="h-lg w-full" />
-      <Bone className="h-lg w-5/6" />
+      <span className={`${boneClass} h-xl w-1/2`} />
+      <span className={`${boneClass} h-lg w-full`} />
+      <span className={`${boneClass} h-lg w-5/6`} />
       <div className="flex flex-col gap-sm">
         <PlanCardSkeleton />
         <PlanCardSkeleton />
@@ -62,14 +61,10 @@ function PlanCardSkeleton() {
   return (
     <div className="flex items-center gap-md rounded-md bg-surface-subtle px-lg pt-sm pb-md shadow-card">
       <div className="flex min-w-0 flex-1 flex-col gap-xs">
-        <Bone className="h-lg w-2/3" />
-        <Bone className="h-lg w-1/3" />
+        <span className={`${boneClass} h-lg w-2/3`} />
+        <span className={`${boneClass} h-lg w-1/3`} />
       </div>
-      <Bone className="h-lg w-1/5" />
+      <span className={`${boneClass} h-lg w-1/5`} />
     </div>
   );
-}
-
-function Bone({ className }: BoneProps) {
-  return <span className={`${boneClass} ${className}`} />;
 }

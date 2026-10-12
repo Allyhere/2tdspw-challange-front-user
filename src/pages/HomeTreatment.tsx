@@ -5,13 +5,13 @@ import { PlanSkeleton, ProfileSkeleton } from "@/components/Skeleton/Skeleton";
 import { TreatmentPlan } from "@/components/TreatmentPlan/TreatmentPlan";
 import { TutorSummary } from "@/components/TutorSummary/TutorSummary";
 import { toPet } from "@/data/owner/owner";
-import { isNotFound } from "@/lib/api/api.types";
+import { ApiError } from "@/lib/api/api.types";
+import { showProfileSkeleton } from "@/utils/showProfileSkeleton";
 import type {
   LoadErrorProps,
   HomeTreatmentProps,
   OwnerStatusProps,
   PlanBodyProps,
-  StatusMessageProps,
 } from "@/pages/HomeTreatment.types";
 import { secondaryButtonClass } from "@/styles/controls/controls.constants";
 
@@ -28,10 +28,10 @@ export function HomeTreatment({
   planQuery,
 }: HomeTreatmentProps) {
   if (showProfileSkeleton(ownerQuery, petReady)) return <ProfileSkeleton />;
-  if (isNotFound(ownerQuery.error) && !ownerQuery.data) {
+  if (ownerQuery.error instanceof ApiError && ownerQuery.error.status === 404 && !ownerQuery.data) {
     return <OwnerStatus tutor={tutor} message="Nenhum pet encontrado." />;
   }
-  if (isUnavailable(ownerQuery) && !ownerQuery.data) {
+  if ((ownerQuery.isError || ownerQuery.fetchStatus === "paused") && !ownerQuery.data) {
     return (
       <LoadError
         message="Não foi possível carregar seus dados."
@@ -57,10 +57,14 @@ export function HomeTreatment({
 
 function PlanBody({ planQuery }: PlanBodyProps) {
   if (planQuery.isLoading && !planQuery.data) return <PlanSkeleton />;
-  if (isNotFound(planQuery.error) && !planQuery.data) {
-    return <StatusMessage>Este pet ainda não tem plano de tratamento.</StatusMessage>;
+  if (planQuery.error instanceof ApiError && planQuery.error.status === 404 && !planQuery.data) {
+    return (
+      <p role="status" className={statusClass}>
+        Este pet ainda não tem plano de tratamento.
+      </p>
+    );
   }
-  if (isUnavailable(planQuery) && !planQuery.data) {
+  if ((planQuery.isError || planQuery.fetchStatus === "paused") && !planQuery.data) {
     return (
       <LoadError
         message="Não foi possível carregar o plano."
@@ -72,32 +76,14 @@ function PlanBody({ planQuery }: PlanBodyProps) {
   return <TreatmentPlan plan={planQuery.data} />;
 }
 
-function showProfileSkeleton(
-  ownerQuery: { isLoading: boolean; data: unknown },
-  petReady: boolean,
-): boolean {
-  if (ownerQuery.isLoading && !ownerQuery.data) return true;
-  return !petReady && ownerQuery.data !== undefined;
-}
-
-function isUnavailable(query: { isError: boolean; fetchStatus: string }): boolean {
-  return query.isError || query.fetchStatus === "paused";
-}
-
 function OwnerStatus({ tutor, message }: OwnerStatusProps) {
   return (
     <>
       {tutor ? <TutorSummary tutor={tutor} /> : null}
-      <StatusMessage>{message}</StatusMessage>
+      <p role="status" className={statusClass}>
+        {message}
+      </p>
     </>
-  );
-}
-
-function StatusMessage({ children }: StatusMessageProps) {
-  return (
-    <p role="status" className={statusClass}>
-      {children}
-    </p>
   );
 }
 

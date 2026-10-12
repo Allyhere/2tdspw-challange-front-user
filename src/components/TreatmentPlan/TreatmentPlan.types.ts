@@ -7,7 +7,3 @@ export type TreatmentPlanProps = {
 export type TreatmentItemRowProps = {
   item: TreatmentAppointment;
 };
-
-export type AppointmentPriceProps = {
-  price: number | null;
-};

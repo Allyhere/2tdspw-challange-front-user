@@ -1,9 +1,8 @@
 import type {
-  AppointmentPriceProps,
   TreatmentItemRowProps,
   TreatmentPlanProps,
 } from "@/components/TreatmentPlan/TreatmentPlan.types";
-import { formatAppointmentDate, formatBrl } from "@/lib/format/format";
+import { formatBrl, formatDateTime } from "@/lib/format/format";
 
 export function TreatmentPlan({ plan }: TreatmentPlanProps) {
   return (
@@ -37,20 +36,15 @@ function TreatmentItemRow({ item }: TreatmentItemRowProps) {
         <h3 className="truncate font-inter text-subtitle text-text-primary">
           {item.appointmentName}
         </h3>
-        <AppointmentPrice price={item.appointmentPrice} />
+        {item.appointmentPrice !== null ? (
+          <p className="truncate font-inter text-body text-price tabular-nums">
+            {formatBrl(item.appointmentPrice)}
+          </p>
+        ) : null}
       </div>
       <p className="shrink-0 text-end font-inter text-caption whitespace-nowrap text-text-primary/30">
-        {formatAppointmentDate(item.appointmentDate)}
+        {formatDateTime(item.appointmentDate)}
       </p>
     </li>
-  );
-}
-
-function AppointmentPrice({ price }: AppointmentPriceProps) {
-  if (price === null) return null;
-  return (
-    <p className="truncate font-inter text-body text-price tabular-nums">
-      {formatBrl(price)}
-    </p>
   );
 }

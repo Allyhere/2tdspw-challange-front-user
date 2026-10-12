@@ -32,17 +32,13 @@ function readRecaptchaClient(): RecaptchaClient | null {
 }
 
 function enterpriseClient(value: unknown): RecaptchaClient | null {
-  if (!isRecord(value) || !("enterprise" in value)) return null;
+  if (typeof value !== "object" || value === null || !("enterprise" in value)) return null;
   return clientWithReset(value.enterprise);
 }
 
 function clientWithReset(value: unknown): RecaptchaClient | null {
   if (!isRecaptchaClient(value)) return null;
   return value;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
 }
 
 function isRecaptchaClient(value: unknown): value is RecaptchaClient {

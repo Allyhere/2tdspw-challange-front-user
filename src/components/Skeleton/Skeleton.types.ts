@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
 
-export type BoneProps = {
-  className: string;
-};
-
 export type CenteredLinesProps = {
   titleClass: string;
   detailClass: string;

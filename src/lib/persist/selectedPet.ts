@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { del, get, set } from "idb-keyval";
+import { get, set } from "idb-keyval";
 import type { TutorPet } from "@/auth/session/session.types";
 
 type StoredPetState = {
@@ -17,10 +17,6 @@ export function usePetSelection(uid: string | undefined, pets: TutorPet[]) {
     ready: stored.ready,
     selectPet: (petId: string) => choosePet(uid, petId, setPickedId),
   };
-}
-
-export function clearSelectedPetId(uid: string): Promise<void> {
-  return del(selectedPetKey(uid));
 }
 
 function useRememberedPet(uid: string | undefined) {
@@ -68,14 +64,10 @@ function choosePet(
 ) {
   setPickedId(petId);
   if (!uid) return;
-  void set(selectedPetKey(uid), petId);
+  void set(`selected-pet:${uid}`, petId);
 }
 
 async function readSelectedPetId(uid: string): Promise<string | undefined> {
-  const value = await get(selectedPetKey(uid));
+  const value = await get(`selected-pet:${uid}`);
   return typeof value === "string" ? value : undefined;
-}
-
-function selectedPetKey(uid: string): string {
-  return `selected-pet:${uid}`;
 }

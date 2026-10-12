@@ -1,6 +1,7 @@
 import { OTPInput, REGEXP_ONLY_DIGITS, type SlotProps } from "input-otp";
 import type { OtpFieldProps } from "@/pages/login/CodeForm/CodeForm.types";
 import { errorClass, labelClass } from "@/styles/controls/controls.constants";
+import { slotClass } from "@/utils/otpSlot";
 
 const OTP_LENGTH = 6;
 const OTP_INPUT_ID = "otp";
@@ -23,7 +24,7 @@ export function OtpField({ code, error, isDisabled, onChange }: OtpFieldProps) {
         pattern={REGEXP_ONLY_DIGITS}
         inputMode="numeric"
         autoComplete="one-time-code"
-        pasteTransformer={pastedDigits}
+        pasteTransformer={(pasted) => pasted.replace(/\D/g, "")}
         aria-invalid={isInvalid || undefined}
         aria-describedby={isInvalid ? OTP_ERROR_ID : undefined}
         disabled={isDisabled}
@@ -32,16 +33,12 @@ export function OtpField({ code, error, isDisabled, onChange }: OtpFieldProps) {
           <OtpSlots slots={slots} isFocused={isFocused} isInvalid={isInvalid} />
         )}
       />
-      {isInvalid ? <OtpError message={error} /> : null}
+      {isInvalid ? (
+        <p id={OTP_ERROR_ID} className={errorClass} role="alert">
+          {error}
+        </p>
+      ) : null}
     </div>
-  );
-}
-
-function OtpError({ message }: { message: string }) {
-  return (
-    <p id={OTP_ERROR_ID} className={errorClass} role="alert">
-      {message}
-    </p>
   );
 }
 
@@ -83,36 +80,9 @@ function OtpSlot({
       className={slotClass(slot.isActive, isFocused, isInvalid)}
     >
       {slot.char}
-      {slot.hasFakeCaret ? <OtpCaret /> : null}
+      {slot.hasFakeCaret ? (
+        <span className="absolute top-1/2 left-1/2 h-lg w-px -translate-x-1/2 -translate-y-1/2 bg-text-primary" />
+      ) : null}
     </div>
   );
-}
-
-function OtpCaret() {
-  return (
-    <span className="absolute top-1/2 left-1/2 h-lg w-px -translate-x-1/2 -translate-y-1/2 bg-text-primary" />
-  );
-}
-
-function slotClass(isActive: boolean, isFocused: boolean, isInvalid: boolean): string {
-  const focus = slotFocus(isActive, isFocused);
-  const border = slotBorder(isActive, isInvalid);
-  return `relative flex h-touch items-center justify-center rounded-sm border bg-surface-subtle font-inter text-heading-2 text-text-primary tabular-nums ${focus} ${border}`;
-}
-
-function slotFocus(isActive: boolean, isFocused: boolean): string {
-  if (isActive && isFocused) {
-    return "outline-2 outline-solid outline-offset-2 outline-primary-dark";
-  }
-  return "outline-none";
-}
-
-function slotBorder(isActive: boolean, isInvalid: boolean): string {
-  if (isInvalid) return "border-danger";
-  if (isActive) return "border-primary-dark";
-  return "border-border-field";
-}
-
-function pastedDigits(pasted: string): string {
-  return pasted.replace(/\D/g, "");
 }

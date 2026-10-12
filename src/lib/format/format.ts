@@ -7,15 +7,7 @@ export function formatBrl(amount: number): string {
   }).format(amount);
 }
 
-export function formatSentAt(iso: string): string {
-  return formatDateTime(iso);
-}
-
-export function formatAppointmentDate(iso: string): string {
-  return formatDateTime(iso);
-}
-
-function formatDateTime(iso: string): string {
+export function formatDateTime(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",

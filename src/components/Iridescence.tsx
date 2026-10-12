@@ -140,8 +140,6 @@ const FIELD_COLUMNS = 48;
 const MAX_SWIRLS = 6;
 const SWIRL_LIFE = 3.2;
 
-const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
-
 const compile = (gl: WebGL2RenderingContext, type: number, source: string) => {
   const shader = gl.createShader(type);
   if (!shader) return null;
@@ -187,7 +185,7 @@ const Iridescence = ({
     amplitude,
     mouseReact,
     scale: Math.max(0.05, scale),
-    detail: clamp(Math.round(detail), 1, 24),
+    detail: Math.min(24, Math.max(1, Math.round(detail))),
     rotation,
     warp,
     hueShift,
@@ -197,10 +195,10 @@ const Iridescence = ({
     stir: Math.max(0, stir),
     sheen: Math.max(0, sheen),
     clickSwirl,
-    grain: clamp(grain, 0, 1),
-    fade: clamp(fade, 0, 1),
-    opacity: clamp(opacity, 0, 1),
-    resolution: clamp(resolution, 0.1, 2),
+    grain: Math.min(1, Math.max(0, grain)),
+    fade: Math.min(1, Math.max(0, fade)),
+    opacity: Math.min(1, Math.max(0, opacity)),
+    resolution: Math.min(2, Math.max(0.1, resolution)),
     paused
   };
   const settingsRef = useRef(settings);
@@ -301,7 +299,7 @@ const Iridescence = ({
       state.colorKey = s.colorKey;
       if (Array.isArray(s.color)) {
         const rgb = s.color as number[];
-        state.color = [0, 1, 2].map(i => clamp(Number(rgb[i] ?? 1), 0, 1));
+        state.color = [0, 1, 2].map((i) => Math.min(1, Math.max(0, Number(rgb[i] ?? 1))));
         return;
       }
       if (!probeCtx) return;
@@ -315,7 +313,7 @@ const Iridescence = ({
 
     const layoutField = () => {
       const cols = FIELD_COLUMNS;
-      const rows = clamp(Math.round((cols * state.height) / state.width), 6, 96);
+      const rows = Math.min(96, Math.max(6, Math.round((cols * state.height) / state.width)));
       if (cols === state.cols && rows === state.rows) return;
       state.cols = cols;
       state.rows = rows;
