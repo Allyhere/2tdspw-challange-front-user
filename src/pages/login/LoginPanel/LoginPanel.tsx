@@ -12,7 +12,7 @@ export function LoginPanel() {
         </div>
         <div className="relative z-10 flex h-full flex-col p-xl pb-2xl">
           <p className="mt-auto hidden max-w-card font-inter text-display text-balance text-surface-base lg:block">
-            Cuidado, saúde e qualidade pra todos
+            Cuidado, saúde e qualidade pro seu pet
           </p>
         </div>
       </div>
