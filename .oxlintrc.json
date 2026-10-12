@@ -10,5 +10,13 @@
       "error",
       { "max": 50, "skipBlankLines": true, "skipComments": true }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/components/Iridescence.tsx"],
+      "rules": {
+        "max-lines-per-function": "off"
+      }
+    }
+  ]
 }

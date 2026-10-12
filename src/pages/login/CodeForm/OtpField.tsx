@@ -102,7 +102,7 @@ function slotClass(isActive: boolean, isFocused: boolean, isInvalid: boolean): s
 
 function slotFocus(isActive: boolean, isFocused: boolean): string {
   if (isActive && isFocused) {
-    return "outline-2 outline-offset-2 outline-primary-dark";
+    return "outline-2 outline-solid outline-offset-2 outline-primary-dark";
   }
   return "outline-none";
 }

@@ -5,13 +5,12 @@ import type { PhoneConfirmation } from "@/auth/phoneAuth/phoneAuth.types";
 import { useAuth } from "@/auth/useAuth/useAuth";
 import { usePageTitle } from "@/lib/usePageTitle";
 import { CodeForm } from "@/pages/login/CodeForm/CodeForm";
+import { LoginScreen } from "@/pages/login/LoginScreen/LoginScreen";
 import { PhoneForm } from "@/pages/login/PhoneForm/PhoneForm";
 
 export function LoginPage() {
   const { user, isReady, signIn } = useAuth();
-  const [confirmation, setConfirmation] = useState<PhoneConfirmation | null>(
-    null,
-  );
+  const [confirmation, setConfirmation] = useState<PhoneConfirmation | null>(null);
   const [phoneNumber, setPhoneNumber] = useState("");
   usePageTitle("Entrar | Veti");
 
@@ -24,30 +23,17 @@ export function LoginPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-shell flex-col justify-center px-lg py-xl">
-      <section className="p-xl">
-        <h1 className="font-inter text-heading-1 text-balance text-text-primary">
-          Entrar
-        </h1>
-        <p className="mt-sm font-roboto text-body text-pretty text-text-primary">
-          Use o celular cadastrado na clínica para receber um código.
-        </p>
-        <p className="mt-sm font-roboto text-body text-pretty text-text-primary">
-          Você pode receber um SMS e a operadora pode cobrar tarifas.
-        </p>
-        <div className="mt-xl">
-          {confirmation ? (
-            <CodeForm
-              confirmation={confirmation}
-              phoneNumber={phoneNumber}
-              onBack={() => setConfirmation(null)}
-              onSuccess={signIn}
-            />
-          ) : (
-            <PhoneForm onCodeSent={handleCodeSent} />
-          )}
-        </div>
-      </section>
-    </main>
+    <LoginScreen>
+      {confirmation ? (
+        <CodeForm
+          confirmation={confirmation}
+          phoneNumber={phoneNumber}
+          onBack={() => setConfirmation(null)}
+          onSuccess={signIn}
+        />
+      ) : (
+        <PhoneForm onCodeSent={handleCodeSent} />
+      )}
+    </LoginScreen>
   );
 }

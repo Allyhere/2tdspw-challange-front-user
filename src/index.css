@@ -23,6 +23,10 @@
   --font-inter: "Inter", sans-serif;
   --font-roboto: "Roboto", sans-serif;
 
+  --text-display: 3rem;
+  --text-display--line-height: 3.25rem;
+  --text-display--font-weight: 600;
+
   --text-heading-1: 1.5rem;
   --text-heading-1--line-height: 2rem;
   --text-heading-1--font-weight: 600;
@@ -70,6 +74,8 @@
   --spacing-lg: 1rem;
   --spacing-field-x: 1.125rem;
   --spacing-xl: 1.5rem;
+  --spacing-2xl: 2.5rem;
+  --spacing-panel-inset: 0.75rem;
   --spacing-icon: 1.125rem;
   --spacing-icon-button: 2.25rem;
   --spacing-touch: 2.75rem;
@@ -77,6 +83,7 @@
 
   --radius-sm: 4px;
   --radius-md: 8px;
+  --radius-panel: 2rem;
   --radius-pill: 1.5rem;
   --radius-full: 100px;
 
@@ -87,6 +94,9 @@
   --container-shell: 40rem;
   --container-card: 22.8125rem;
   --container-bubble: 16.625rem;
+  --container-login: 80rem;
+  --container-login-card: 30rem;
+  --container-login-form: 24rem;
 }
 
 html {
