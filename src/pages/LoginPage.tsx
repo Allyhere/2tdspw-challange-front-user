@@ -25,7 +25,7 @@ export function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-shell flex-col justify-center px-lg py-xl">
-      <section className="rounded-md bg-surface-base p-xl shadow-subtle">
+      <section className="p-xl">
         <h1 className="font-inter text-heading-1 text-balance text-text-primary">
           Entrar
         </h1>

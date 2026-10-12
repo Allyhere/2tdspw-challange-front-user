@@ -17,6 +17,7 @@
   --color-surface-subtle: #fcfbfe;
   --color-surface-alt: #fef7ff;
   --color-border-divider: #ebe4f0;
+  --color-border-field: rgb(30 9 48 / 0.3);
   --color-image-placeholder: #c4c4c4;
 
   --font-inter: "Inter", sans-serif;
@@ -42,6 +43,19 @@
   --text-button--line-height: 1.25rem;
   --text-button--font-weight: 400;
 
+  --text-button-lg: 1.25rem;
+  --text-button-lg--line-height: 1.25rem;
+  --text-button-lg--font-weight: 500;
+  --text-button-lg--letter-spacing: 0.1px;
+
+  --text-field: 1.125rem;
+  --text-field--line-height: 1.4;
+  --text-field--font-weight: 400;
+
+  --text-field-label: 1rem;
+  --text-field-label--line-height: 1.4;
+  --text-field-label--font-weight: 400;
+
   --text-label: 0.875rem;
   --text-label--line-height: 1.25rem;
   --text-label--font-weight: 500;
@@ -54,6 +68,7 @@
   --spacing-sm: 0.5rem;
   --spacing-md: 0.75rem;
   --spacing-lg: 1rem;
+  --spacing-field-x: 1.125rem;
   --spacing-xl: 1.5rem;
   --spacing-icon: 1.125rem;
   --spacing-icon-button: 2.25rem;
@@ -75,7 +90,7 @@
 }
 
 html {
-  background-color: var(--color-surface-subtle);
+  background-color: var(--color-surface-base);
   color: var(--color-text-primary);
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;

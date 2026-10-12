@@ -110,7 +110,7 @@ function slotFocus(isActive: boolean, isFocused: boolean): string {
 function slotBorder(isActive: boolean, isInvalid: boolean): string {
   if (isInvalid) return "border-danger";
   if (isActive) return "border-primary-dark";
-  return "border-border-divider";
+  return "border-border-field";
 }
 
 function pastedDigits(pasted: string): string {
