@@ -10,6 +10,9 @@ import type { AuthUser } from "@/auth/session/session.types";
 import { AuthContext } from "@/auth/useAuth/useAuth.constants";
 import type { AuthContextValue } from "@/auth/useAuth/useAuth.types";
 import { getFirebaseAuth, isFirebaseConfigured } from "@/lib/firebase";
+import { clearSignedInCache } from "@/lib/persist/clearSignedInCache";
+import { requestPersistentStorage } from "@/lib/persist/persistentStorage";
+import { unsealQueryCache } from "@/lib/persist/queryCache";
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -40,8 +43,15 @@ async function applySession(
   setUser: (user: AuthUser | null) => void,
   setIsReady: (ready: boolean) => void,
 ) {
-  setUser(await readTutorSession(next));
+  const tutor = await readTutorSession(next);
+  if (tutor) openSignedInStorage();
+  setUser(tutor);
   setIsReady(true);
+}
+
+function openSignedInStorage(): void {
+  unsealQueryCache();
+  requestPersistentStorage();
 }
 
 function createAuthValue(
@@ -53,16 +63,23 @@ function createAuthValue(
     user,
     isReady,
     signIn: (next) => {
+      openSignedInStorage();
       setUser(next);
     },
     signOut: () => {
+      const uid = user?.uid;
       setUser(null);
-      void signOutOfFirebase();
+      void endSignedInSession(uid);
     },
   };
 }
 
-function signOutOfFirebase() {
-  if (!isFirebaseConfigured()) return;
+async function endSignedInSession(uid: string | undefined): Promise<void> {
+  await clearSignedInCache(uid);
+  await signOutOfFirebase();
+}
+
+function signOutOfFirebase(): Promise<void> {
+  if (!isFirebaseConfigured()) return Promise.resolve();
   return firebaseSignOut(getFirebaseAuth());
 }

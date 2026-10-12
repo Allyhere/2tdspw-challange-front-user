@@ -21,18 +21,17 @@ export function HomeTreatment({
   tutor,
   ownerQuery,
   pet,
+  petReady,
   pets,
   selectedPetId,
   onSelectPet,
   planQuery,
 }: HomeTreatmentProps) {
-  if (ownerQuery.isLoading) {
-    return <ProfileSkeleton />;
-  }
-  if (isNotFound(ownerQuery.error)) {
+  if (showProfileSkeleton(ownerQuery, petReady)) return <ProfileSkeleton />;
+  if (isNotFound(ownerQuery.error) && !ownerQuery.data) {
     return <OwnerStatus tutor={tutor} message="Nenhum pet encontrado." />;
   }
-  if (ownerQuery.isError) {
+  if (isUnavailable(ownerQuery) && !ownerQuery.data) {
     return (
       <LoadError
         message="Não foi possível carregar seus dados."
@@ -57,13 +56,11 @@ export function HomeTreatment({
 }
 
 function PlanBody({ planQuery }: PlanBodyProps) {
-  if (planQuery.isLoading) {
-    return <PlanSkeleton />;
-  }
-  if (isNotFound(planQuery.error)) {
+  if (planQuery.isLoading && !planQuery.data) return <PlanSkeleton />;
+  if (isNotFound(planQuery.error) && !planQuery.data) {
     return <StatusMessage>Este pet ainda não tem plano de tratamento.</StatusMessage>;
   }
-  if (planQuery.isError) {
+  if (isUnavailable(planQuery) && !planQuery.data) {
     return (
       <LoadError
         message="Não foi possível carregar o plano."
@@ -73,6 +70,18 @@ function PlanBody({ planQuery }: PlanBodyProps) {
   }
   if (!planQuery.data) return null;
   return <TreatmentPlan plan={planQuery.data} />;
+}
+
+function showProfileSkeleton(
+  ownerQuery: { isLoading: boolean; data: unknown },
+  petReady: boolean,
+): boolean {
+  if (ownerQuery.isLoading && !ownerQuery.data) return true;
+  return !petReady && ownerQuery.data !== undefined;
+}
+
+function isUnavailable(query: { isError: boolean; fetchStatus: string }): boolean {
+  return query.isError || query.fetchStatus === "paused";
 }
 
 function OwnerStatus({ tutor, message }: OwnerStatusProps) {

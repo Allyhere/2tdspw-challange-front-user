@@ -41,7 +41,7 @@ try {
   await waitForPreview();
   await run("npx", [
     "axe",
-    `${origin}/`,
+    `${origin}/?a11y=1`,
     `${origin}/home?a11y=1`,
     `${origin}/conversation?a11y=1`,
     "--tags",

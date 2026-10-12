@@ -1,3 +1,5 @@
+/// <reference types="vite-plugin-pwa/vanillajs" />
+
 interface ImportMetaEnv {
   readonly VITE_API_URL?: string;
   readonly EXPO_PUBLIC_FIREBASE_API_KEY?: string;
