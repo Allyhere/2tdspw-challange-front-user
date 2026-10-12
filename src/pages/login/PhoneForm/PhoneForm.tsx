@@ -27,28 +27,37 @@ import {
 } from "@/styles/controls/controls.constants";
 
 const SEND_CODE_BUTTON_ID = "send-code";
-const RECAPTCHA_CONTAINER_ID = "recaptcha-container";
 
 export function PhoneForm({ onCodeSent }: PhoneFormProps) {
   const [phone, setPhone] = useState("");
   const [pending, setPending] = useState(false);
   const [serverError, setServerError] = useState("");
-  const verifierRef = usePhoneVerifier();
+  const phoneRef = useRef(phone);
+  const sendLockRef = useRef(false);
+  const verifierRef = useRef<RecaptchaVerifier | null>(null);
 
-  function handlePhoneChange(value: string) {
-    setPhone(value);
-    setServerError("");
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    await submitPhone(
-      phone,
+  function sendCode() {
+    void submitPhone(
+      phoneRef.current,
       verifierRef.current,
+      sendLockRef,
       setPending,
       setServerError,
       onCodeSent,
     );
+  }
+
+  const submitBeforeWidget = usePhoneVerifier(verifierRef, sendCode);
+
+  function handlePhoneChange(value: string) {
+    phoneRef.current = value;
+    setPhone(value);
+    setServerError("");
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    submitBeforeWidget();
   }
 
   return (
@@ -58,7 +67,6 @@ export function PhoneForm({ onCodeSent }: PhoneFormProps) {
       className="flex flex-col gap-md"
     >
       <PhoneField phone={phone} onChange={handlePhoneChange} />
-      <div id={RECAPTCHA_CONTAINER_ID} />
       <Button
         id={SEND_CODE_BUTTON_ID}
         type="submit"
@@ -71,37 +79,80 @@ export function PhoneForm({ onCodeSent }: PhoneFormProps) {
   );
 }
 
-function usePhoneVerifier(): RefObject<RecaptchaVerifier | null> {
-  const verifierRef = useRef<RecaptchaVerifier | null>(null);
+function usePhoneVerifier(
+  verifierRef: RefObject<RecaptchaVerifier | null>,
+  onSolved: () => void,
+): () => void {
+  const onSolvedRef = useRef(onSolved);
+  const widgetReadyRef = useRef(false);
 
   useEffect(() => {
-    if (!isFirebaseConfigured()) return;
-    const container = document.getElementById(RECAPTCHA_CONTAINER_ID);
-    if (!container) return;
-    const verifier = createPhoneVerifier(getFirebaseAuth(), container);
-    verifierRef.current = verifier;
-    return () => {
-      verifier.clear();
-      verifierRef.current = null;
-    };
-  }, []);
+    onSolvedRef.current = onSolved;
+  }, [onSolved]);
 
-  return verifierRef;
+  useEffect(
+    () => mountPhoneVerifier(verifierRef, onSolvedRef, widgetReadyRef),
+    [verifierRef],
+  );
+
+  return () => {
+    if (widgetReadyRef.current) return;
+    onSolvedRef.current();
+  };
+}
+
+function mountPhoneVerifier(
+  verifierRef: RefObject<RecaptchaVerifier | null>,
+  onSolvedRef: RefObject<() => void>,
+  widgetReadyRef: RefObject<boolean>,
+): () => void {
+  if (!isFirebaseConfigured()) return () => undefined;
+  const button = document.getElementById(SEND_CODE_BUTTON_ID);
+  if (!(button instanceof HTMLButtonElement)) return () => undefined;
+  const verifier = createPhoneVerifier(getFirebaseAuth(), button, () => {
+    onSolvedRef.current();
+  });
+  verifierRef.current = verifier;
+  let active = true;
+  void verifier.render().then(() => {
+    if (active) widgetReadyRef.current = true;
+  }).catch(() => undefined);
+  return () => releasePhoneVerifier(verifier, verifierRef, widgetReadyRef, () => {
+    active = false;
+  });
+}
+
+function releasePhoneVerifier(
+  verifier: RecaptchaVerifier,
+  verifierRef: RefObject<RecaptchaVerifier | null>,
+  widgetReadyRef: RefObject<boolean>,
+  deactivate: () => void,
+): void {
+  deactivate();
+  widgetReadyRef.current = false;
+  verifier.clear();
+  verifierRef.current = null;
 }
 
 async function submitPhone(
   phone: string,
   verifier: RecaptchaVerifier | null,
+  sendLockRef: RefObject<boolean>,
   setPending: (pending: boolean) => void,
   setServerError: (message: string) => void,
   onCodeSent: (confirmation: PhoneConfirmation, phoneNumber: string) => void,
 ) {
+  if (sendLockRef.current) return;
   const phoneNumber = normalizePhone(phone);
-  if (!phoneNumber) return;
+  if (!phoneNumber) {
+    setServerError(validatePhone(phone) ?? PHONE_AUTH_ERROR_FALLBACK);
+    return;
+  }
   if (!verifier) {
     setServerError(PHONE_AUTH_ERROR_FALLBACK);
     return;
   }
+  sendLockRef.current = true;
   setServerError("");
   setPending(true);
   try {
@@ -109,6 +160,7 @@ async function submitPhone(
   } catch (error) {
     setServerError(phoneAuthErrorMessage(error));
     setPending(false);
+    sendLockRef.current = false;
     await resetPhoneVerifier(verifier).catch(() => undefined);
   }
 }

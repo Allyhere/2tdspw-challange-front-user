@@ -22,9 +22,6 @@ export function getFirebaseAuth(): Auth {
   }
   const auth = getAuth(getFirebaseApp(config));
   auth.languageCode = "pt";
-  if (import.meta.env.DEV) {
-    auth.settings.appVerificationDisabledForTesting = true;
-  }
   firebaseAuth = auth;
   return auth;
 }

@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/auth/AuthProvider/AuthProvider";
-import { Iridescence } from "@/components/Iridescence";
+import pageWash from "@/assets/page-wash.png";
 import { AriaRouter } from "@/routes/AriaRouter/AriaRouter";
 
 export function RootLayout() {
@@ -20,8 +20,14 @@ export function RootLayout() {
 
 function PageBackdrop() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden="true">
-      <Iridescence color="#8b3fbf" />
+    <div className="pointer-events-none fixed inset-0 -z-10 bg-primary-light" aria-hidden="true">
+      <img
+        src={pageWash}
+        alt=""
+        width={460}
+        height={460}
+        className="size-full max-w-none object-cover opacity-40"
+      />
     </div>
   );
 }

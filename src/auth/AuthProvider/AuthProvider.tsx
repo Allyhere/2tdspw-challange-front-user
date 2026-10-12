@@ -5,6 +5,7 @@ import {
   type User,
 } from "firebase/auth";
 import type { AuthProviderProps } from "@/auth/AuthProvider/AuthProvider.types";
+import { readTutorSession } from "@/auth/session/readTutorSession";
 import type { AuthUser } from "@/auth/session/session.types";
 import { AuthContext } from "@/auth/useAuth/useAuth.constants";
 import type { AuthContextValue } from "@/auth/useAuth/useAuth.types";
@@ -29,16 +30,18 @@ function useFirebaseSession(
   useEffect(() => {
     if (!isFirebaseConfigured()) return;
     return onAuthStateChanged(getFirebaseAuth(), (next) => {
-      setUser(mapFirebaseUser(next));
-      setIsReady(true);
+      void applySession(next, setUser, setIsReady);
     });
   }, [setUser, setIsReady]);
 }
 
-function mapFirebaseUser(user: User | null): AuthUser | null {
-  const phoneNumber = user?.phoneNumber;
-  if (!user || !phoneNumber) return null;
-  return { phoneNumber, uid: user.uid };
+async function applySession(
+  next: User | null,
+  setUser: (user: AuthUser | null) => void,
+  setIsReady: (ready: boolean) => void,
+) {
+  setUser(await readTutorSession(next));
+  setIsReady(true);
 }
 
 function createAuthValue(

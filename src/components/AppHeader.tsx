@@ -7,7 +7,7 @@ export function AppHeader() {
   const { signOut } = useAuth();
 
   return (
-    <header className="border-b border-border-divider bg-surface-base shadow-floating">
+    <header>
       <div className="mx-auto flex w-full max-w-shell items-center justify-between px-lg py-sm">
         <Link
           href="/home"

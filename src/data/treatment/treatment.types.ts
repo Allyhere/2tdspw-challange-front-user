@@ -1,11 +1,8 @@
-export type PlanRecurrence = "single" | "recurrent";
-
-export type TreatmentItem = {
-  planItemName: string;
-  planRecurrency: PlanRecurrence;
-  planRecurrencyRate?: number;
-  planDurationInMonths: number;
-  price: number;
+export type TreatmentAppointment = {
+  id: string;
+  appointmentName: string;
+  appointmentPrice: number | null;
+  appointmentDate: string;
 };
 
 export type Pet = {
@@ -18,5 +15,5 @@ export type Pet = {
 
 export type TreatmentPlanData = {
   summary: string;
-  items: TreatmentItem[];
+  items: TreatmentAppointment[];
 };

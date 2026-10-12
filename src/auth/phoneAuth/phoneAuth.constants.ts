@@ -8,6 +8,8 @@ export const PHONE_AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/invalid-phone-number": "Este celular não é válido.",
   "auth/captcha-check-failed":
     "Não foi possível confirmar que você não é um robô.",
+  "auth/invalid-app-credential":
+    "Não foi possível confirmar que você não é um robô.",
   "auth/billing-not-enabled":
     "Ative o faturamento do Firebase (plano Blaze) para enviar o código.",
 };

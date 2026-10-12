@@ -1,2 +1,0 @@
-export const removeItemButtonClass =
-  "hit-target inline-flex size-icon-button shrink-0 cursor-pointer items-center justify-center rounded-full bg-remove-surface text-remove outline-none transition-press data-pressed:scale-press data-pressed:opacity-80 data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark data-disabled:cursor-not-allowed data-disabled:opacity-50";

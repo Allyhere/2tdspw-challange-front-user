@@ -1,5 +1,3 @@
-import type { TreatmentItem } from "@/data/treatment/treatment.types";
-import { recurrenceLabels } from "@/lib/format/format.constants";
 import type { PetDetails } from "@/lib/format/format.types";
 
 export function formatBrl(amount: number): string {
@@ -10,6 +8,14 @@ export function formatBrl(amount: number): string {
 }
 
 export function formatSentAt(iso: string): string {
+  return formatDateTime(iso);
+}
+
+export function formatAppointmentDate(iso: string): string {
+  return formatDateTime(iso);
+}
+
+function formatDateTime(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -18,14 +24,10 @@ export function formatSentAt(iso: string): string {
   }).format(new Date(iso));
 }
 
-export function formatPlanRecurrence(item: TreatmentItem): string {
-  if (item.planRecurrency !== "recurrent" || !item.planRecurrencyRate) {
-    return "única";
-  }
-  return (
-    recurrenceLabels[item.planRecurrencyRate] ??
-    `a cada ${item.planRecurrencyRate} meses`
-  );
+export function formatCpf(document: string): string {
+  const digits = document.replace(/\D/g, "");
+  if (digits.length !== 11) return document;
+  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
 }
 
 export function formatPetDetails(pet: PetDetails): string {
