@@ -11,6 +11,7 @@ import { AuthContext } from "@/auth/useAuth/useAuth.constants";
 import type { AuthContextValue } from "@/auth/useAuth/useAuth.types";
 import { getFirebaseAuth, isFirebaseConfigured } from "@/lib/firebase";
 import { clearSignedInCache } from "@/lib/persist/clearSignedInCache";
+import { removeWebPushSubscription } from "@/lib/pwa/webPush";
 import { requestPersistentStorage } from "@/lib/persist/persistentStorage";
 import { unsealQueryCache } from "@/lib/persist/queryCache";
 
@@ -75,6 +76,7 @@ function createAuthValue(
 }
 
 async function endSignedInSession(uid: string | undefined): Promise<void> {
+  await removeWebPushSubscription();
   await clearSignedInCache(uid);
   await signOutOfFirebase();
 }

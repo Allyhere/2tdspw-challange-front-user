@@ -43,7 +43,7 @@ try {
     "axe",
     `${origin}/?a11y=1`,
     `${origin}/home?a11y=1`,
-    `${origin}/conversation?a11y=1`,
+    `${origin}/conversation/preview?a11y=1`,
     "--tags",
     "wcag2a,wcag2aa",
     "--exit",

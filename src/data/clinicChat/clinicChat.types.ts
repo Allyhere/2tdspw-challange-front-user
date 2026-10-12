@@ -5,4 +5,6 @@ export type ClinicMessage = {
   author: MessageAuthor;
   body: string;
   sentAt: string;
+  pending?: boolean;
+  failed?: boolean;
 };

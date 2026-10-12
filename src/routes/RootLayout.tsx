@@ -1,3 +1,4 @@
+import { ChatPushRefresh } from "@/lib/pwa/ChatPushRefresh";
 import { Outlet, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/auth/AuthProvider/AuthProvider";
 import pageWash from "@/assets/page-wash.png";
@@ -9,6 +10,7 @@ export function RootLayout() {
   return (
     <AriaRouter>
       <AuthProvider>
+        <ChatPushRefresh />
         <div className="relative isolate min-h-screen">
           {pathname === "/" ? null : <PageBackdrop />}
           <Outlet />

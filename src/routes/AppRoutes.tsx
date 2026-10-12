@@ -19,7 +19,7 @@ export const appRouter = createBrowserRouter([
         ),
       },
       {
-        path: "/conversation",
+        path: "/conversation/:conversationId",
         element: (
           <RequireAuth>
             <ConversationPage />

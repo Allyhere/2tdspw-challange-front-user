@@ -32,8 +32,9 @@ function serviceWorker() {
       skipWaiting: true,
       clientsClaim: true,
       navigateFallback: "index.html",
-      navigateFallbackAllowlist: [/^\/$/, /^\/home$/, /^\/conversation$/],
+      navigateFallbackAllowlist: [/^\/$/, /^\/home$/, /^\/conversation\/[^/]+$/],
       globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}"],
+      importScripts: ["push.js"],
     },
   });
 }

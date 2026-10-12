@@ -3,6 +3,8 @@ export type TreatmentAppointment = {
   appointmentName: string;
   appointmentPrice: number | null;
   appointmentDate: string;
+  notifyWhatsapp: boolean;
+  notifyWeb: boolean;
 };
 
 export type Pet = {

@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { AppHeader } from "@/components/AppHeader";
-import { ChatPreview } from "@/components/ChatPreview/ChatPreview";
+import { ClinicInbox } from "@/components/ChatPreview/ChatPreview";
 import { useAuth } from "@/auth/useAuth/useAuth";
-import { clinicMessages } from "@/data/clinicChat/clinicChat.constants";
-import { fetchSignedInOwner, fetchTreatmentPlan, mergeTutor } from "@/data/owner/owner";
+import {
+  fetchSignedInOwner,
+  fetchTreatmentPlan,
+  mergeTutor,
+} from "@/data/owner/owner";
 import { offlineQueryOptions } from "@/lib/persist/offlineQuery";
 import { usePetSelection } from "@/lib/persist/selectedPet";
 import { usePageTitle } from "@/lib/usePageTitle";
@@ -27,6 +30,7 @@ export function HomePage() {
     <>
       <AppHeader />
       <main className="mx-auto flex w-full max-w-shell flex-col gap-xl px-lg py-xl">
+        <ClinicInbox uid={user?.uid} />
         <HomeTreatment
           tutor={tutor}
           ownerQuery={ownerQuery}
@@ -37,7 +41,6 @@ export function HomePage() {
           onSelectPet={selection.selectPet}
           planQuery={planQuery}
         />
-        <ChatPreview messages={clinicMessages} />
       </main>
     </>
   );
@@ -52,7 +55,11 @@ function useOwnerProfile(uid: string | undefined, isReady: boolean) {
   });
 }
 
-function useCarePlan(uid: string | undefined, petId: string | undefined, enabled: boolean) {
+function useCarePlan(
+  uid: string | undefined,
+  petId: string | undefined,
+  enabled: boolean,
+) {
   return useQuery({
     queryKey: ["treatment-plan", uid, petId],
     queryFn: () => fetchTreatmentPlan(requiredPetId(petId)),

@@ -50,12 +50,12 @@ export function HomeTreatment({
         <PetChooser pets={pets} selectedPetId={selectedPetId} onSelectPet={onSelectPet} />
       ) : null}
       <PetHeader pet={toPet(pet)} />
-      <PlanBody planQuery={planQuery} />
+      <PlanBody planQuery={planQuery} uid={tutor?.uid} petId={pet.id} />
     </>
   );
 }
 
-function PlanBody({ planQuery }: PlanBodyProps) {
+function PlanBody({ planQuery, uid, petId }: PlanBodyProps) {
   if (planQuery.isLoading && !planQuery.data) return <PlanSkeleton />;
   if (planQuery.error instanceof ApiError && planQuery.error.status === 404 && !planQuery.data) {
     return (
@@ -73,7 +73,7 @@ function PlanBody({ planQuery }: PlanBodyProps) {
     );
   }
   if (!planQuery.data) return null;
-  return <TreatmentPlan plan={planQuery.data} />;
+  return <TreatmentPlan plan={planQuery.data} uid={uid} petId={petId} />;
 }
 
 function OwnerStatus({ tutor, message }: OwnerStatusProps) {

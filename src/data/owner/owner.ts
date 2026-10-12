@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { AuthUser, TutorPet } from "@/auth/session/session.types";
-import { apiGet } from "@/lib/api/api";
+import { apiGet, apiSendJson } from "@/lib/api/api";
 import type { Pet, TreatmentPlanData } from "@/data/treatment/treatment.types";
 
 const petSchema = z.object({
@@ -29,6 +29,8 @@ const appointmentSchema = z.object({
   appointmentName: z.string(),
   appointmentPrice: z.number().nullable(),
   appointmentDate: z.string(),
+  notifyWhatsapp: z.boolean(),
+  notifyWeb: z.boolean(),
 });
 
 const planSchema = z.object({
@@ -69,6 +71,22 @@ export function mergeTutor(
 export async function fetchTreatmentPlan(petId: string): Promise<TreatmentPlanData> {
   const path = `/owner/${encodeURIComponent(petId)}/plan`;
   const plan = await apiGet(path, planSchema);
+  return toTreatmentPlan(plan);
+}
+
+export function saveAppointmentNotifications(
+  petId: string,
+  appointments: Array<{
+    id: string;
+    notifyWhatsapp: boolean;
+    notifyWeb: boolean;
+  }>,
+): Promise<TreatmentPlanData> {
+  const path = `/owner/${encodeURIComponent(petId)}/plan/notifications`;
+  return apiSendJson(path, "PATCH", { appointments }, planSchema).then(toTreatmentPlan);
+}
+
+function toTreatmentPlan(plan: z.infer<typeof planSchema>): TreatmentPlanData {
   return {
     summary: plan.carePlanDescription,
     items: plan.carePlan.map((item) => ({
@@ -76,6 +94,8 @@ export async function fetchTreatmentPlan(petId: string): Promise<TreatmentPlanDa
       appointmentName: item.appointmentName,
       appointmentPrice: item.appointmentPrice,
       appointmentDate: item.appointmentDate,
+      notifyWhatsapp: item.notifyWhatsapp,
+      notifyWeb: item.notifyWeb,
     })),
   };
 }
