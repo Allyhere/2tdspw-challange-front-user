@@ -1,5 +1,6 @@
 import { EnvelopeIcon, IdentificationCardIcon, PhoneIcon } from "@phosphor-icons/react";
 
+import { Show } from "@/components/Show/Show";
 import { SparklesText } from "@/components/SparklesText/SparklesText";
 import { cn } from "@/utils/cn";
 
@@ -36,24 +37,30 @@ function Details({ email, phone, document: documentNumber, className }: DetailsP
         className,
       )}
     >
-      {email ? (
-        <li className="flex items-center gap-sm">
-          <EnvelopeIcon aria-hidden="true" className="size-lg shrink-0 text-primary" />
-          <span className="text-pretty">{email}</span>
-        </li>
-      ) : null}
-      {phone ? (
-        <li className="flex items-center gap-sm">
-          <PhoneIcon aria-hidden="true" className="size-lg shrink-0 text-primary" />
-          <span className="text-pretty tabular-nums">{phone}</span>
-        </li>
-      ) : null}
-      {documentNumber ? (
-        <li className="flex items-center gap-sm">
-          <IdentificationCardIcon aria-hidden="true" className="size-lg shrink-0 text-primary" />
-          <span className="text-pretty tabular-nums">{documentNumber}</span>
-        </li>
-      ) : null}
+      <Show.When when={email || false}>
+        {(address) => (
+          <li className="flex items-center gap-sm">
+            <EnvelopeIcon aria-hidden="true" className="size-lg shrink-0 text-primary" />
+            <span className="text-pretty">{address}</span>
+          </li>
+        )}
+      </Show.When>
+      <Show.When when={phone || false}>
+        {(number) => (
+          <li className="flex items-center gap-sm">
+            <PhoneIcon aria-hidden="true" className="size-lg shrink-0 text-primary" />
+            <span className="text-pretty tabular-nums">{number}</span>
+          </li>
+        )}
+      </Show.When>
+      <Show.When when={documentNumber || false}>
+        {(value) => (
+          <li className="flex items-center gap-sm">
+            <IdentificationCardIcon aria-hidden="true" className="size-lg shrink-0 text-primary" />
+            <span className="text-pretty tabular-nums">{value}</span>
+          </li>
+        )}
+      </Show.When>
     </ul>
   );
 }

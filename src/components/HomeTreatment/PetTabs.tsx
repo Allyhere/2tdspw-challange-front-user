@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "react-aria-components";
 import { ClinicInbox } from "@/components/ChatPreview/ChatPreview";
 import type { PetPanelProps, PetTabsProps } from "@/components/HomeTreatment/PetTabs.types";
-import { PetTabsStates } from "@/components/HomeTreatment/PetTabsStates";
 import { PlanBody } from "@/components/HomeTreatment/PlanBody";
 import { PetHeader } from "@/components/PetHeader/PetHeader";
 import { Show } from "@/components/Show/Show";
@@ -85,7 +84,11 @@ function PetIntro({ pet }: { pet: HomePet }) {
         {pet.breed ? `${pet.name} (${pet.breed})` : pet.name}
       </h2>
       <Show.When when={details.length > 0 ? details : false}>
-        {(parts) => <PetTabsStates.Details details={parts} />}
+        {(parts) => (
+          <p className="font-inter text-subtitle text-pretty text-text-primary tabular-nums">
+            {parts.join(" · ")}
+          </p>
+        )}
       </Show.When>
     </header>
   );

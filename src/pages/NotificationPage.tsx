@@ -1,10 +1,10 @@
-import { Link, RadioButton, RadioField, RadioGroup } from "react-aria-components";
+import { Link } from "react-aria-components";
 import { AppHeader } from "@/components/AppHeader";
+import { Show } from "@/components/Show/Show";
 import { useAuth } from "@/auth/useAuth/useAuth";
-import { formatSilenceUntil } from "@/lib/format/format";
 import { useNotificationSilence } from "@/lib/persist/useNotificationSilence";
 import { usePageTitle } from "@/lib/usePageTitle";
-import type { SilenceChoice } from "@/utils/silenceChoice";
+import { NotificationStates } from "@/pages/NotificationStates";
 
 export function NotificationPage() {
   usePageTitle("Notificações | Veti");
@@ -27,58 +27,26 @@ export function NotificationPage() {
         <p className="font-inter text-body text-pretty text-text-primary">
           Escolha por quanto tempo silenciar os avisos.
         </p>
-        {silence.ready ? (
-          <SilenceOptions choice={silence.choice} onSelect={silence.select} />
-        ) : (
-          <p className="font-inter text-body text-text-primary">Carregando preferência.</p>
-        )}
-        <p
-          role="status"
-          className="font-inter text-body text-pretty text-text-primary tabular-nums"
-        >
-          {silence.until
-            ? `Avisos silenciados até ${formatSilenceUntil(silence.until)}.`
-            : "Os avisos continuam ativos."}
-        </p>
+        <Show>
+          <Show.When when={silence.ready}>
+            <NotificationStates.Options
+              choice={silence.choice}
+              onSelect={silence.select}
+            />
+          </Show.When>
+          <Show.Otherwise>
+            <NotificationStates.Loading />
+          </Show.Otherwise>
+        </Show>
+        <Show>
+          <Show.When when={silence.until}>
+            {(until) => <NotificationStates.Silenced until={until} />}
+          </Show.When>
+          <Show.Otherwise>
+            <NotificationStates.Active />
+          </Show.Otherwise>
+        </Show>
       </main>
     </>
-  );
-}
-
-function SilenceOptions({
-  choice,
-  onSelect,
-}: {
-  choice: SilenceChoice;
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <RadioGroup
-      aria-label="Por quanto tempo silenciar"
-      value={choice}
-      onChange={onSelect}
-      className="flex flex-col gap-sm"
-    >
-      <RadioField value="day">
-        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
-          Um dia
-        </RadioButton>
-      </RadioField>
-      <RadioField value="month">
-        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
-          Um mês
-        </RadioButton>
-      </RadioField>
-      <RadioField value="three-months">
-        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
-          Três meses
-        </RadioButton>
-      </RadioField>
-      <RadioField value="never">
-        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
-          Nunca
-        </RadioButton>
-      </RadioField>
-    </RadioGroup>
   );
 }

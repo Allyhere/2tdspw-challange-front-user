@@ -2,7 +2,7 @@ import { Button } from "react-aria-components";
 import type {
   MessageBubbleProps,
   MessageListProps,
-} from "@/components/MessageList/MessageList.types";
+} from "@/components/PetHeader/MessageList.types";
 import { formatDateTime } from "@/lib/format/format";
 
 export function MessageList({ messages, onRetry }: MessageListProps) {
