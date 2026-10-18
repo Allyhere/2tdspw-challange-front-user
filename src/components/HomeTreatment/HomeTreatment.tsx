@@ -11,7 +11,6 @@ export function HomeTreatment({
   tutor,
   ownerQuery,
   uid,
-  pet,
   petReady,
   pets,
   selectedPetId,
@@ -29,13 +28,14 @@ export function HomeTreatment({
       />
     );
   }
-  if (!pet) {
+  if (pets.length === 0) {
     return <OwnerStatus tutor={tutor} message="Nenhum pet encontrado." />;
   }
 
   return (
     <>
       {tutor ? <TutorSummary tutor={tutor} /> : null}
+      <h3 className="font-inter text-heading-3 text-balance text-text-primary">Seus pets</h3>
       <div className="rounded-md bg-surface-base p-lg shadow-floating md:p-xl">
         <PetTabs pets={pets} selectedPetId={selectedPetId} onSelectPet={onSelectPet} uid={uid} />
       </div>

@@ -27,7 +27,6 @@ export function HomePage() {
           tutor={tutor}
           ownerQuery={ownerQuery}
           uid={user?.uid}
-          pet={selection.pet}
           petReady={selection.ready}
           pets={pets}
           selectedPetId={selection.pet?.id ?? ""}

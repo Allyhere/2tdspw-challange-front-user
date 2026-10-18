@@ -7,7 +7,10 @@ import { useAuth } from "@/auth/useAuth/useAuth";
 export function AppHeader() {
   return (
     <header className="sticky top-0 z-10 px-md pt-md pb-sm md:px-lg md:pt-lg md:pb-2xl">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-primary-light" aria-hidden="true">
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-primary-light"
+        aria-hidden="true"
+      >
         <img
           src={pageWash}
           alt=""
@@ -18,7 +21,7 @@ export function AppHeader() {
       </div>
       <nav
         aria-label="Principal"
-        className="relative mx-auto flex w-full max-w-dashboard flex-col gap-sm rounded-panel bg-surface-base p-sm shadow-floating md:flex-row md:items-center md:gap-lg md:px-md"
+        className="relative mx-auto flex w-full max-w-dashboard flex-col gap-sm rounded-panel bg-surface-base p-sm shadow-floating md:flex-row md:items-center md:gap-lg px-xl"
       >
         <div className="flex items-center justify-between gap-md md:contents">
           <HomeLink />
@@ -37,7 +40,13 @@ function HomeLink() {
       aria-label="Veti"
       className="inline-flex min-h-touch shrink-0 items-center outline-none transition-nav data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
     >
-      <img src={vetiLogo} alt="" width={523} height={230} className="h-logo w-auto" />
+      <img
+        src={vetiLogo}
+        alt=""
+        width={523}
+        height={230}
+        className="h-logo w-auto"
+      />
     </Link>
   );
 }
@@ -59,7 +68,15 @@ function SiteLinks() {
   );
 }
 
-function NavLink({ href, current, label }: { href: string; current: boolean; label: string }) {
+function NavLink({
+  href,
+  current,
+  label,
+}: {
+  href: string;
+  current: boolean;
+  label: string;
+}) {
   return (
     <Link
       href={href}

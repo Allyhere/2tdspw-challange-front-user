@@ -7,7 +7,6 @@ export type HomeTreatmentProps = {
   tutor: AuthUser | null;
   ownerQuery: UseQueryResult<OwnerProfile>;
   uid: string | undefined;
-  pet: HomePet | undefined;
   petReady: boolean;
   pets: HomePet[];
   selectedPetId: string;
