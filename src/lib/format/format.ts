@@ -16,6 +16,16 @@ export function formatDateTime(iso: string): string {
   }).format(new Date(iso));
 }
 
+export function formatSilenceUntil(iso: string): string {
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
+
 export function formatCpf(document: string): string {
   const digits = document.replace(/\D/g, "");
   if (digits.length !== 11) return document;

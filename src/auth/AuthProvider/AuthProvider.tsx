@@ -11,7 +11,7 @@ import { AuthContext } from "@/auth/useAuth/useAuth.constants";
 import type { AuthContextValue } from "@/auth/useAuth/useAuth.types";
 import { getFirebaseAuth, isFirebaseConfigured } from "@/lib/firebase";
 import { clearSignedInCache } from "@/lib/persist/clearSignedInCache";
-import { removeWebPushSubscription } from "@/lib/pwa/webPush";
+import { removeWebPushSubscription, startWebPush } from "@/lib/pwa/webPush";
 import { requestPersistentStorage } from "@/lib/persist/persistentStorage";
 import { unsealQueryCache } from "@/lib/persist/queryCache";
 
@@ -45,7 +45,10 @@ async function applySession(
   setIsReady: (ready: boolean) => void,
 ) {
   const tutor = await readTutorSession(next);
-  if (tutor) openSignedInStorage();
+  if (tutor) {
+    openSignedInStorage();
+    startWebPush(false);
+  }
   setUser(tutor);
   setIsReady(true);
 }
@@ -66,6 +69,7 @@ function createAuthValue(
     signIn: (next) => {
       openSignedInStorage();
       setUser(next);
+      startWebPush(true);
     },
     signOut: () => {
       const uid = user?.uid;

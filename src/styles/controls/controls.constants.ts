@@ -11,6 +11,12 @@ export const primaryButtonClass =
 export const secondaryButtonClass =
   "inline-flex min-h-touch cursor-pointer items-center justify-center rounded-md border border-border-divider bg-surface-base p-lg font-roboto text-button-lg text-text-primary outline-none data-hovered:bg-surface-alt data-pressed:bg-primary-light data-focus-visible:outline-2 data-focus-visible:outline-solid data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark data-disabled:cursor-not-allowed data-disabled:opacity-60";
 
+export const menuButtonClass =
+  "group inline-flex size-touch cursor-pointer items-center justify-center rounded-md text-text-primary outline-none transition-press data-hovered:bg-surface-base data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark";
+
+export const menuItemClass =
+  "flex min-h-touch cursor-pointer items-center rounded-sm px-lg font-roboto text-button text-text-primary outline-none data-focused:bg-primary-light data-hovered:bg-primary-light";
+
 export const textLinkClass =
   "inline-flex min-h-touch items-center font-roboto text-button text-text-primary underline outline-none data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark";
 

@@ -4,6 +4,12 @@ import { vapidKeyBytes } from "@/utils/vapidKey";
 
 const endpointKey = "veti-web-push-endpoint";
 
+export function startWebPush(requestPermission: boolean): void {
+  if (!("Notification" in window)) return;
+  if (!requestPermission && Notification.permission !== "granted") return;
+  void enableWebPush().catch(() => undefined);
+}
+
 export async function enableWebPush(): Promise<boolean> {
   if (!("Notification" in window)) return false;
   const permission = await Notification.requestPermission();

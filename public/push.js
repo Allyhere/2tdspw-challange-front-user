@@ -37,10 +37,46 @@ async function deliverPush(payload) {
     }
     return;
   }
+  if (await isSilenced()) return;
   await self.registration.showNotification(payload.title, {
     body: payload.body,
     data: { conversationId: payload.data.conversationId },
   });
+}
+
+async function isSilenced() {
+  const until = await readSilenceUntil();
+  const end = Date.parse(until);
+  return Number.isFinite(end) && end > Date.now();
+}
+
+function readSilenceUntil() {
+  return new Promise((resolve) => {
+    const request = indexedDB.open("keyval-store");
+    request.onerror = () => resolve(null);
+    request.onupgradeneeded = () => {
+      request.transaction.abort();
+    };
+    request.onsuccess = () => readSilenceRecord(request.result, resolve);
+  });
+}
+
+function readSilenceRecord(db, resolve) {
+  if (!db.objectStoreNames.contains("keyval")) {
+    db.close();
+    resolve(null);
+    return;
+  }
+  const getRequest = db.transaction("keyval", "readonly").objectStore("keyval").get("notification-silence");
+  getRequest.onsuccess = () => {
+    const value = getRequest.result;
+    db.close();
+    resolve(value && typeof value.until === "string" ? value.until : null);
+  };
+  getRequest.onerror = () => {
+    db.close();
+    resolve(null);
+  };
 }
 
 async function openConversation(path) {

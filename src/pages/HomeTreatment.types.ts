@@ -21,8 +21,6 @@ export type OwnerStatusProps = {
 
 export type PlanBodyProps = {
   planQuery: UseQueryResult<TreatmentPlanData>;
-  uid: string | undefined;
-  petId: string;
 };
 
 export type LoadErrorProps = {
