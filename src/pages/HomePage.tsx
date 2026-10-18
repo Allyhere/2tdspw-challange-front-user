@@ -5,6 +5,7 @@ import { HomeTreatment } from "@/components/HomeTreatment/HomeTreatment";
 import { inboxItems } from "@/data/clinicChat/conversation";
 import { useInbox } from "@/data/clinicChat/useConversation";
 import { fetchSignedInOwner, mergeTutor } from "@/data/owner/owner";
+import { usePetsByPlan } from "@/hooks/usePetsByPlan";
 import { offlineQueryOptions } from "@/lib/persist/offlineQuery";
 import { usePetSelection } from "@/lib/persist/selectedPet";
 import { usePageTitle } from "@/lib/usePageTitle";
@@ -16,7 +17,7 @@ export function HomePage() {
   const ownerQuery = useOwnerProfile(user?.uid, isReady);
   const tutor = mergeTutor(user, ownerQuery.data);
   const inbox = useInbox(user?.uid);
-  const pets = homePets(tutor?.pets ?? [], inboxItems(inbox.data));
+  const pets = usePetsByPlan(user?.uid, homePets(tutor?.pets ?? [], inboxItems(inbox.data)));
   const selection = usePetSelection(user?.uid, pets);
 
   return (

@@ -9,9 +9,6 @@ import { withPendingMessage } from "@/data/clinicChat/withPendingMessage";
 import { ApiError } from "@/lib/api/api.types";
 import { usePageTitle } from "@/lib/usePageTitle";
 import { MessageComposer } from "@/pages/conversation/MessageComposer";
-import { secondaryButtonClass, textLinkClass } from "@/styles/controls/controls.constants";
-
-const statusClass = "font-roboto text-body text-text-primary";
 
 export function ConversationPage() {
   usePageTitle("Conversa com a clínica | Veti");
@@ -29,7 +26,10 @@ export function ConversationPage() {
         <h1 className="font-inter text-heading-1 text-balance text-text-primary">
           Conversa com a clínica
         </h1>
-        <Link href="/home" className={textLinkClass}>
+        <Link
+          href="/home"
+          className="inline-flex min-h-touch items-center font-roboto text-button text-text-primary underline outline-none data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
+        >
           Voltar ao plano
         </Link>
         <ThreadStatus
@@ -40,7 +40,7 @@ export function ConversationPage() {
           onRetry={() => void thread.refetch()}
         />
         {thread.data || send.draft ? <MessageList messages={messages} onRetry={send.retry} /> : null}
-        <p aria-live="polite" className={statusClass}>
+        <p aria-live="polite" className="font-roboto text-body text-text-primary">
           {waiting ? "A clínica está respondendo" : ""}
           {send.draft?.failed ? "Não foi possível enviar a mensagem." : ""}
         </p>
@@ -66,9 +66,9 @@ function ThreadStatus({
   isError: boolean;
   onRetry: () => void;
 }) {
-  if (isLoading) return <p className={statusClass}>Carregando conversa.</p>;
+  if (isLoading) return <p className="font-roboto text-body text-text-primary">Carregando conversa.</p>;
   if (isOffline) return <StatusProblem message="Você está offline." onRetry={onRetry} />;
-  if (isMissing) return <p className={statusClass}>Conversa não encontrada.</p>;
+  if (isMissing) return <p className="font-roboto text-body text-text-primary">Conversa não encontrada.</p>;
   if (isError) return <StatusProblem message="Não foi possível carregar a conversa." onRetry={onRetry} />;
   return null;
 }
@@ -76,8 +76,12 @@ function ThreadStatus({
 function StatusProblem({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
     <div className="flex flex-col items-start gap-md">
-      <p className={statusClass}>{message}</p>
-      <Button type="button" className={secondaryButtonClass} onPress={onRetry}>
+      <p className="font-roboto text-body text-text-primary">{message}</p>
+      <Button
+        type="button"
+        className="inline-flex min-h-touch cursor-pointer items-center justify-center rounded-md border border-border-divider bg-surface-base p-lg font-roboto text-button-lg text-text-primary outline-none transition-press data-hovered:bg-surface-alt data-pressed:scale-press data-pressed:bg-primary-light data-focus-visible:outline-2 data-focus-visible:outline-solid data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark data-disabled:cursor-not-allowed data-disabled:opacity-60"
+        onPress={onRetry}
+      >
         Tentar de novo
       </Button>
     </div>

@@ -7,9 +7,21 @@ type TutorContact = {
   document: string;
 };
 
-export function tutorDetails(tutor: TutorContact): string {
-  const phone = tutor.phoneNumber ? formatPhone(tutor.phoneNumber) : "";
-  return [tutor.email, phone, formatCpf(tutor.document)]
-    .filter((part) => part.length > 0)
-    .join(" · ");
+export type TutorDetails = {
+  email: string;
+  phone: string;
+  document: string;
+};
+
+export function tutorDetails(tutor: TutorContact): TutorDetails {
+  return {
+    email: tutor.email,
+    phone: nationalPhone(tutor.phoneNumber),
+    document: tutor.document ? formatCpf(tutor.document) : "",
+  };
+}
+
+function nationalPhone(phoneNumber: string): string {
+  if (!phoneNumber) return "";
+  return formatPhone(phoneNumber).replace(/^\+55\s*/, "");
 }

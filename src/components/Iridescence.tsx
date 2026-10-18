@@ -27,9 +27,6 @@ export interface IridescenceProps {
 
 type Swirl = { x: number; y: number; age: number };
 
-const ROOT = 'relative h-full w-full overflow-hidden';
-const CANVAS = 'absolute inset-0 block h-full w-full';
-
 const VERTEX = `#version 300 es
 in vec2 aPosition;
 out vec2 vUv;
@@ -542,8 +539,8 @@ const Iridescence = ({
   });
 
   return (
-    <div ref={rootRef} className={`${ROOT}${className ? ` ${className}` : ''}`} style={style}>
-      <canvas ref={canvasRef} className={CANVAS} aria-hidden="true" />
+    <div ref={rootRef} className={`relative h-full w-full overflow-hidden${className ? ` ${className}` : ''}`} style={style}>
+      <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" aria-hidden="true" />
     </div>
   );
 };

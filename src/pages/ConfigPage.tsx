@@ -1,7 +1,6 @@
 import { Link } from "react-aria-components";
 import { AppHeader } from "@/components/AppHeader";
 import { usePageTitle } from "@/lib/usePageTitle";
-import { previewLinkClass } from "@/styles/controls/controls.constants";
 
 export function ConfigPage() {
   usePageTitle("Configurações | Veti");
@@ -13,7 +12,10 @@ export function ConfigPage() {
         <h1 className="font-inter text-heading-1 text-balance text-text-primary">
           Configurações
         </h1>
-        <Link href="/notification" className={previewLinkClass}>
+        <Link
+          href="/notification"
+          className="flex min-h-touch flex-col gap-xs rounded-md bg-surface-base p-lg no-underline shadow-card outline-none transition-surface data-hovered:shadow-floating data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
+        >
           <span className="font-roboto text-label text-text-primary underline">
             Notificações
           </span>

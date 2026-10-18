@@ -1,6 +1,5 @@
 import { OTPInput, REGEXP_ONLY_DIGITS, type SlotProps } from "input-otp";
 import type { OtpFieldProps } from "@/pages/login/CodeForm/CodeForm.types";
-import { errorClass, labelClass } from "@/styles/controls/controls.constants";
 import { slotClass } from "@/utils/otpSlot";
 
 const OTP_LENGTH = 6;
@@ -12,7 +11,7 @@ export function OtpField({ code, error, isDisabled, onChange }: OtpFieldProps) {
 
   return (
     <div className="flex flex-col gap-xs">
-      <label htmlFor={OTP_INPUT_ID} className={labelClass}>
+      <label htmlFor={OTP_INPUT_ID} className="font-inter text-field-label text-text-primary">
         Código
       </label>
       <OTPInput
@@ -34,7 +33,7 @@ export function OtpField({ code, error, isDisabled, onChange }: OtpFieldProps) {
         )}
       />
       {isInvalid ? (
-        <p id={OTP_ERROR_ID} className={errorClass} role="alert">
+        <p id={OTP_ERROR_ID} className="font-roboto text-caption text-danger" role="alert">
           {error}
         </p>
       ) : null}

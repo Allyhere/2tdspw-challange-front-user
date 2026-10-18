@@ -4,11 +4,7 @@ import { useAuth } from "@/auth/useAuth/useAuth";
 import { formatSilenceUntil } from "@/lib/format/format";
 import { useNotificationSilence } from "@/lib/persist/useNotificationSilence";
 import { usePageTitle } from "@/lib/usePageTitle";
-import { textLinkClass } from "@/styles/controls/controls.constants";
 import type { SilenceChoice } from "@/utils/silenceChoice";
-
-const radioClass =
-  "flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark";
 
 export function NotificationPage() {
   usePageTitle("Notificações | Veti");
@@ -22,7 +18,10 @@ export function NotificationPage() {
         <h1 className="font-inter text-heading-1 text-balance text-text-primary">
           Notificações
         </h1>
-        <Link href="/config" className={textLinkClass}>
+        <Link
+          href="/config"
+          className="inline-flex min-h-touch items-center font-roboto text-button text-text-primary underline outline-none data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
+        >
           Voltar às configurações
         </Link>
         <p className="font-inter text-body text-pretty text-text-primary">
@@ -61,16 +60,24 @@ function SilenceOptions({
       className="flex flex-col gap-sm"
     >
       <RadioField value="day">
-        <RadioButton className={radioClass}>Um dia</RadioButton>
+        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
+          Um dia
+        </RadioButton>
       </RadioField>
       <RadioField value="month">
-        <RadioButton className={radioClass}>Um mês</RadioButton>
+        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
+          Um mês
+        </RadioButton>
       </RadioField>
       <RadioField value="three-months">
-        <RadioButton className={radioClass}>Três meses</RadioButton>
+        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
+          Três meses
+        </RadioButton>
       </RadioField>
       <RadioField value="never">
-        <RadioButton className={radioClass}>Nunca</RadioButton>
+        <RadioButton className="flex min-h-touch cursor-pointer items-center rounded-md border border-border-divider bg-surface-base px-lg font-inter text-body text-text-primary outline-none transition-press data-selected:border-primary data-selected:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark">
+          Nunca
+        </RadioButton>
       </RadioField>
     </RadioGroup>
   );

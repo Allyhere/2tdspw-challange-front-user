@@ -3,12 +3,14 @@ import { motion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "react-aria-components";
 import { ClinicInbox } from "@/components/ChatPreview/ChatPreview";
-import { panelClass, tabClass, tabListClass } from "@/components/HomeTreatment/PetTabs.constants";
 import type { PetPanelProps, PetTabsProps } from "@/components/HomeTreatment/PetTabs.types";
+import { PetTabsStates } from "@/components/HomeTreatment/PetTabsStates";
 import { PlanBody } from "@/components/HomeTreatment/PlanBody";
 import { PetHeader } from "@/components/PetHeader/PetHeader";
+import { Show } from "@/components/Show/Show";
 import { fetchTreatmentPlan, toPet } from "@/data/owner/owner";
 import type { HomePet } from "@/utils/homePets";
+import { formatKilograms } from "@/utils/formatKilograms";
 import { useEasedHeight } from "@/hooks/useEasedHeight";
 import { offlineQueryOptions } from "@/lib/persist/offlineQuery";
 
@@ -21,9 +23,16 @@ export function PetTabs({ pets, selectedPetId, onSelectPet, uid }: PetTabsProps)
       }}
       className="flex flex-col gap-lg"
     >
-      <TabList aria-label="Pets" className={tabListClass}>
+      <TabList
+        aria-label="Pets"
+        className="flex w-full gap-xs overflow-x-auto rounded-md bg-surface-alt p-sm shadow-hairline"
+      >
         {pets.map((pet) => (
-          <Tab key={pet.id} id={pet.id} className={tabClass}>
+          <Tab
+            key={pet.id}
+            id={pet.id}
+            className="inline-flex min-h-touch min-w-24 flex-1 cursor-pointer items-center justify-center rounded-md px-lg font-roboto text-label whitespace-nowrap text-text-primary outline-none transition-tab not-data-selected:data-hovered:bg-surface-base data-selected:bg-primary data-selected:text-primary-light data-selected:shadow-subtle data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
+          >
             {pet.name}
           </Tab>
         ))}
@@ -31,7 +40,7 @@ export function PetTabs({ pets, selectedPetId, onSelectPet, uid }: PetTabsProps)
       <EasedPanels>
         <TabPanels>
           {pets.map((pet) => (
-            <TabPanel key={pet.id} id={pet.id} className={panelClass}>
+            <TabPanel key={pet.id} id={pet.id} className="flex flex-col gap-xl">
               <PetPanel pet={pet} uid={uid} />
             </TabPanel>
           ))}
@@ -66,21 +75,18 @@ function PetPanel({ pet, uid }: PetPanelProps) {
 
 function PetIntro({ pet }: { pet: HomePet }) {
   if (pet.profile) return <PetHeader pet={toPet(pet.profile)} />;
-  const weight =
-    pet.weight === null
-      ? null
-      : `${new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(pet.weight)} kg`;
-  const details = [weight, pet.age === null ? null : `${pet.age} anos`].filter((part) => part !== null);
+  const weight = pet.weight === null ? null : formatKilograms(pet.weight);
+  const details = [weight, pet.age === null ? null : `${pet.age} anos`].filter(
+    (part): part is string => part !== null,
+  );
   return (
     <header className="flex flex-col items-start gap-xs">
       <h2 className="font-inter text-heading-1 text-balance text-text-primary">
         {pet.breed ? `${pet.name} (${pet.breed})` : pet.name}
       </h2>
-      {details.length > 0 ? (
-        <p className="font-inter text-subtitle text-pretty text-text-primary tabular-nums">
-          {details.join(" · ")}
-        </p>
-      ) : null}
+      <Show.When when={details.length > 0 ? details : false}>
+        {(parts) => <PetTabsStates.Details details={parts} />}
+      </Show.When>
     </header>
   );
 }

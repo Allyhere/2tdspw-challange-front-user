@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { fetchConversation, fetchInbox } from "@/data/clinicChat/conversation";
-import { useVisibleInterval } from "@/utils/useVisibleInterval";
+import { useVisibleInterval } from "@/hooks/useVisibleInterval";
 
 const REFRESH_MS = 20_000;
 

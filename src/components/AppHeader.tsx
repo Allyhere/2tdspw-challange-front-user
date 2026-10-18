@@ -81,7 +81,11 @@ function NavLink({
     <Link
       href={href}
       aria-current={current ? "page" : undefined}
-      className={current ? currentLinkClass : linkClass}
+      className={
+        current
+          ? "inline-flex min-h-touch w-full items-center justify-center rounded-full bg-surface-base px-md font-roboto text-label text-primary shadow-subtle outline-none transition-nav data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:w-auto"
+          : "inline-flex min-h-touch w-full items-center justify-center rounded-full px-md font-roboto text-label text-text-primary outline-none transition-nav data-hovered:text-primary-dark data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:w-auto"
+      }
     >
       {label}
     </Link>
@@ -91,17 +95,12 @@ function NavLink({
 function SignOutButton() {
   const { signOut } = useAuth();
   return (
-    <Button type="button" onPress={signOut} className={signOutClass}>
+    <Button
+      type="button"
+      onPress={signOut}
+      className="inline-flex min-h-touch shrink-0 cursor-pointer items-center rounded-pill px-lg font-roboto text-label text-text-primary outline-none transition-nav data-hovered:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:order-3 md:ml-auto"
+    >
       Sair
     </Button>
   );
 }
-
-const linkClass =
-  "inline-flex min-h-touch w-full items-center justify-center rounded-full px-md font-roboto text-label text-text-primary outline-none transition-nav data-hovered:text-primary-dark data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:w-auto";
-
-const currentLinkClass =
-  "inline-flex min-h-touch w-full items-center justify-center rounded-full bg-surface-base px-md font-roboto text-label text-primary shadow-subtle outline-none transition-nav data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:w-auto";
-
-const signOutClass =
-  "inline-flex min-h-touch shrink-0 cursor-pointer items-center rounded-pill px-lg font-roboto text-label text-text-primary outline-none transition-nav data-hovered:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:order-3 md:ml-auto";

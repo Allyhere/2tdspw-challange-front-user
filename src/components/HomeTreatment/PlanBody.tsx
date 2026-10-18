@@ -1,4 +1,3 @@
-import { statusClass } from "@/components/HomeTreatment/HomeTreatment.constants";
 import { LoadError } from "@/components/HomeTreatment/LoadError";
 import type { PlanBodyProps } from "@/components/HomeTreatment/PlanBody.types";
 import { PlanSkeleton } from "@/components/Skeleton/Skeleton";
@@ -9,7 +8,7 @@ export function PlanBody({ planQuery }: PlanBodyProps) {
   if (planQuery.isLoading && !planQuery.data) return <PlanSkeleton />;
   if (planQuery.error instanceof ApiError && planQuery.error.status === 404 && !planQuery.data) {
     return (
-      <p role="status" className={statusClass}>
+      <p role="status" className="font-inter text-body text-pretty text-text-primary">
         Este pet ainda não tem plano de tratamento.
       </p>
     );

@@ -12,12 +12,6 @@ import { usePlanScroll } from "@/hooks/usePlanScroll";
 import { formatBrl, formatDateTime } from "@/lib/format/format";
 import { groupAppointmentsByDay } from "@/utils/groupAppointmentsByDay";
 
-const scrollerClass =
-  "overflow-y-auto overscroll-y-contain outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-dark";
-
-const edgeButtonClass =
-  "grid size-touch cursor-pointer place-items-center rounded-full bg-surface-base text-text-primary shadow-floating outline-none transition-press data-hovered:bg-surface-alt data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark data-disabled:cursor-default";
-
 export function TreatmentPlan({ plan, visibleCount = 5 }: TreatmentPlanProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const days = groupAppointmentsByDay(plan.items);
@@ -48,7 +42,7 @@ function PlanList({ days, scrollerRef, scroll }: PlanListProps) {
         ref={scrollerRef}
         tabIndex={bounded ? 0 : undefined}
         aria-label="Itens do plano de tratamento"
-        className={scrollerClass}
+        className="overflow-y-auto overscroll-y-contain outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-dark"
         style={{ maxHeight: scroll.windowHeight ?? "none" }}
       >
         <ul className="flex flex-col gap-lg">
@@ -146,7 +140,13 @@ function PlanEdgeButton({
       className={`absolute left-1/2 z-20 -translate-x-1/2 ${enabled ? "pointer-events-auto" : "pointer-events-none"} ${className}`}
       style={{ opacity: cue, scale, filter: blur }}
     >
-      <Button type="button" aria-label={label} isDisabled={!enabled} onPress={onPress} className={edgeButtonClass}>
+      <Button
+        type="button"
+        aria-label={label}
+        isDisabled={!enabled}
+        onPress={onPress}
+        className="grid size-touch cursor-pointer place-items-center rounded-full bg-surface-base text-text-primary shadow-floating outline-none transition-press data-hovered:bg-surface-alt data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark data-disabled:cursor-default"
+      >
         <svg viewBox="0 0 16 16" aria-hidden="true" className="size-lg">
           <path
             d={path}

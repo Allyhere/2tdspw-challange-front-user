@@ -1,11 +1,9 @@
 import { Button } from "react-aria-components";
-import { bubbleSide, bubbleSurface } from "@/components/MessageList/MessageList.constants";
 import type {
   MessageBubbleProps,
   MessageListProps,
 } from "@/components/MessageList/MessageList.types";
 import { formatDateTime } from "@/lib/format/format";
-import { textLinkClass } from "@/styles/controls/controls.constants";
 
 export function MessageList({ messages, onRetry }: MessageListProps) {
   if (messages.length === 0) {
@@ -29,9 +27,11 @@ function MessageBubble({ message, onRetry }: MessageBubbleProps) {
   const author = message.author === "clinic" ? "Clínica" : "Você";
 
   return (
-    <li className={`flex flex-col gap-xs ${bubbleSide[message.author]}`}>
+    <li
+      className={`flex flex-col gap-xs ${message.author === "clinic" ? "items-start" : "items-end"}`}
+    >
       <article
-        className={`max-w-bubble rounded-sm p-lg shadow-subtle ${bubbleSurface[message.author]} ${message.failed ? "border border-danger" : ""}`}
+        className={`max-w-bubble rounded-sm p-lg shadow-subtle ${message.author === "clinic" ? "bg-surface-base" : "bg-whatsapp-bg"} ${message.failed ? "border border-danger" : ""}`}
       >
         <p className="sr-only">{author}</p>
         <p className="font-roboto text-body text-pretty text-text-primary">
@@ -45,7 +45,11 @@ function MessageBubble({ message, onRetry }: MessageBubbleProps) {
         </time>
       </article>
       {message.failed ? (
-        <Button type="button" className={textLinkClass} onPress={() => onRetry(message.id)}>
+        <Button
+          type="button"
+          className="inline-flex min-h-touch items-center font-roboto text-button text-text-primary underline outline-none data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
+          onPress={() => onRetry(message.id)}
+        >
           Tentar de novo
         </Button>
       ) : null}
