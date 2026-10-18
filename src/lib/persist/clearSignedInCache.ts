@@ -1,5 +1,6 @@
 import { del } from "idb-keyval";
 import { clearNotificationSilence } from "@/lib/persist/notificationSilence";
+import { clearPlanBust } from "@/lib/persist/planBust";
 import { queryClient } from "@/lib/queryClient";
 import { queryPersister, sealQueryCache } from "@/lib/persist/queryCache";
 
@@ -11,6 +12,7 @@ export async function clearSignedInCache(uid: string | undefined): Promise<void>
   await queryClient.removeQueries({ queryKey: ["conversation"] });
   await queryPersister.removeClient();
   await clearNotificationSilence();
+  await clearPlanBust();
   if (!uid) return;
   await del(`selected-pet:${uid}`);
 }

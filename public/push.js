@@ -30,13 +30,10 @@ function readPayload(event) {
 
 async function deliverPush(payload) {
   const windows = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-  const visible = windows.some((client) => client.visibilityState === "visible");
-  if (visible) {
-    for (const client of windows) {
-      client.postMessage({ type: "chat-push", conversationId: payload.data.conversationId });
-    }
-    return;
-  }
+  const message = { type: "chat-push", conversationId: payload.data.conversationId };
+  await rememberPlanBust();
+  for (const client of windows) client.postMessage(message);
+  if (windows.some((client) => client.visibilityState === "visible")) return;
   if (await isSilenced()) return;
   await self.registration.showNotification(payload.title, {
     body: payload.body,
@@ -76,6 +73,37 @@ function readSilenceRecord(db, resolve) {
   getRequest.onerror = () => {
     db.close();
     resolve(null);
+  };
+}
+
+function rememberPlanBust() {
+  return new Promise((resolve) => {
+    const request = indexedDB.open("keyval-store");
+    request.onerror = () => resolve();
+    request.onupgradeneeded = () => {
+      request.transaction.abort();
+    };
+    request.onsuccess = () => writePlanBust(request.result, resolve);
+  });
+}
+
+function writePlanBust(db, resolve) {
+  if (!db.objectStoreNames.contains("keyval")) {
+    db.close();
+    resolve();
+    return;
+  }
+  const putRequest = db
+    .transaction("keyval", "readwrite")
+    .objectStore("keyval")
+    .put(Date.now(), "treatment-plan-bust");
+  putRequest.onsuccess = () => {
+    db.close();
+    resolve();
+  };
+  putRequest.onerror = () => {
+    db.close();
+    resolve();
   };
 }
 
