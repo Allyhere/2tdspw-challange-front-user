@@ -1,3 +1,4 @@
+import type { InfiniteData } from "@tanstack/react-query";
 import { z } from "zod";
 import type { ClinicMessage } from "@/data/clinicChat/clinicChat.types";
 import type {
@@ -17,7 +18,13 @@ const messageSchema = z.object({
 
 const summarySchema = z.object({
   id: z.string(),
-  pet: z.object({ name: z.string() }),
+  pet: z.object({
+    id: z.string(),
+    name: z.string(),
+    breed: z.string(),
+    weight: z.number(),
+    age: z.number(),
+  }),
   planStep: z.object({ planItemName: z.string() }),
   lastMessage: messageSchema.nullable(),
 });
@@ -80,10 +87,14 @@ function toInboxPage(page: z.infer<typeof listSchema>): InboxPage {
   };
 }
 
+export function inboxItems(data: InfiniteData<InboxPage> | undefined): ConversationSummary[] {
+  return data?.pages.flatMap((page) => page.items) ?? [];
+}
+
 function toSummary(item: z.infer<typeof summarySchema>): ConversationSummary {
   return {
     id: item.id,
-    petName: item.pet.name,
+    pet: item.pet,
     planItemName: item.planStep.planItemName,
     lastMessage: item.lastMessage ? toClinicMessage(item.lastMessage) : null,
   };

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { get, set } from "idb-keyval";
-import type { TutorPet } from "@/auth/session/session.types";
 
 type StoredPetState = {
   uid: string | undefined;
@@ -8,7 +7,7 @@ type StoredPetState = {
   ready: boolean;
 };
 
-export function usePetSelection(uid: string | undefined, pets: TutorPet[]) {
+export function usePetSelection<T extends { id: string }>(uid: string | undefined, pets: T[]) {
   const stored = useRememberedPet(uid);
   const [pickedId, setPickedId] = useState<string | undefined>();
   const selectedId = pickedId ?? stored.petId;
@@ -52,7 +51,7 @@ function useStoredPet(
   }, [uid, setStored]);
 }
 
-function resolvePet(ready: boolean, pets: TutorPet[], selectedId: string | undefined) {
+function resolvePet<T extends { id: string }>(ready: boolean, pets: T[], selectedId: string | undefined) {
   if (!ready) return undefined;
   return pets.find((item) => item.id === selectedId) ?? pets[0];
 }

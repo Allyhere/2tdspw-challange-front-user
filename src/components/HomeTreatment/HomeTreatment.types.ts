@@ -1,15 +1,15 @@
 import type { UseQueryResult } from "@tanstack/react-query";
-import type { AuthUser, TutorPet } from "@/auth/session/session.types";
+import type { AuthUser } from "@/auth/session/session.types";
 import type { OwnerProfile } from "@/data/owner/owner";
-import type { TreatmentPlanData } from "@/data/treatment/treatment.types";
+import type { HomePet } from "@/utils/homePets";
 
 export type HomeTreatmentProps = {
   tutor: AuthUser | null;
   ownerQuery: UseQueryResult<OwnerProfile>;
-  pet: TutorPet | undefined;
+  uid: string | undefined;
+  pet: HomePet | undefined;
   petReady: boolean;
-  pets: TutorPet[];
+  pets: HomePet[];
   selectedPetId: string;
   onSelectPet: (petId: string) => void;
-  planQuery: UseQueryResult<TreatmentPlanData>;
 };

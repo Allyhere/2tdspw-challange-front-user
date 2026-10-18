@@ -9,9 +9,17 @@ export type PublicMessage = {
   createdAt: string;
 };
 
+export type ConversationPet = {
+  id: string;
+  name: string;
+  breed: string;
+  weight: number;
+  age: number;
+};
+
 export type ConversationSummary = {
   id: string;
-  petName: string;
+  pet: ConversationPet;
   planItemName: string;
   lastMessage: ClinicMessage | null;
 };

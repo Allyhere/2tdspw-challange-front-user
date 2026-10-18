@@ -1,19 +1,18 @@
-import type { InfiniteData } from "@tanstack/react-query";
 import { Button, Link } from "react-aria-components";
 import type {
   ChatPreviewProps,
   ConversationLinkProps,
 } from "@/components/ChatPreview/ChatPreview.types";
+import { inboxItems } from "@/data/clinicChat/conversation";
 import { useInbox } from "@/data/clinicChat/useConversation";
-import type { ConversationSummary, InboxPage } from "@/data/clinicChat/conversation.types";
 import { formatDateTime } from "@/lib/format/format";
 import { previewLinkClass, secondaryButtonClass } from "@/styles/controls/controls.constants";
 
 const statusClass = "font-roboto text-body text-text-primary";
 
-export function ClinicInbox({ uid }: { uid: string | undefined }) {
+export function ClinicInbox({ uid, petId }: { uid: string | undefined; petId: string }) {
   const inbox = useInbox(uid);
-  const items = flattenInbox(inbox.data);
+  const items = inboxItems(inbox.data).filter((item) => item.pet.id === petId);
   return (
     <ChatPreview
       items={items}
@@ -104,7 +103,7 @@ function ConversationLink({ item }: ConversationLinkProps) {
   return (
     <Link href={`/conversation/${item.id}`} className={previewLinkClass}>
       <span className="font-roboto text-label text-text-primary underline">
-        {item.petName} · {item.planItemName}
+        {item.pet.name} · {item.planItemName}
       </span>
       <p className="font-roboto text-body text-pretty text-text-primary">
         {item.lastMessage?.body ?? "Nenhuma mensagem ainda."}
@@ -121,6 +120,3 @@ function ConversationLink({ item }: ConversationLinkProps) {
   );
 }
 
-function flattenInbox(data: InfiniteData<InboxPage> | undefined): ConversationSummary[] {
-  return data?.pages.flatMap((page) => page.items) ?? [];
-}
