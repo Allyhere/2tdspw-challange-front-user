@@ -33,3 +33,16 @@ Write a single-line helper at the call site. Put any longer helper in `src/utils
 ## Hooks
 
 Put React hooks in `src/hooks`.
+
+## Testing
+
+Use the app at `http://localhost:5173`. Do not start another dev server, and do not use any other port.
+
+Sign in when the page asks for it:
+
+1. Celular: `11959397552`
+2. Submit **Enviar código**
+3. Código: `123456`
+4. Submit **Confirmar código**
+
+Then exercise the flow you changed. Sign out first when a different session is already open.

@@ -6,7 +6,10 @@ export function OwnerStatus({ tutor, message }: OwnerStatusProps) {
   return (
     <>
       {tutor ? <TutorSummary tutor={tutor} /> : null}
-      <p role="status" className={statusClass}>
+      <p
+        role="status"
+        className={`${statusClass} rounded-md bg-surface-base p-lg shadow-floating md:p-xl`}
+      >
         {message}
       </p>
     </>

@@ -36,7 +36,9 @@ export function HomeTreatment({
   return (
     <>
       {tutor ? <TutorSummary tutor={tutor} /> : null}
-      <PetTabs pets={pets} selectedPetId={selectedPetId} onSelectPet={onSelectPet} uid={uid} />
+      <div className="rounded-md bg-surface-base p-lg shadow-floating md:p-xl">
+        <PetTabs pets={pets} selectedPetId={selectedPetId} onSelectPet={onSelectPet} uid={uid} />
+      </div>
     </>
   );
 }

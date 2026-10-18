@@ -1,3 +1,5 @@
+import { useRef, type ReactNode } from "react";
+import { motion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "react-aria-components";
 import { ClinicInbox } from "@/components/ChatPreview/ChatPreview";
@@ -7,6 +9,7 @@ import { PlanBody } from "@/components/HomeTreatment/PlanBody";
 import { PetHeader } from "@/components/PetHeader/PetHeader";
 import { fetchTreatmentPlan, toPet } from "@/data/owner/owner";
 import type { HomePet } from "@/utils/homePets";
+import { useEasedHeight } from "@/hooks/useEasedHeight";
 import { offlineQueryOptions } from "@/lib/persist/offlineQuery";
 
 export function PetTabs({ pets, selectedPetId, onSelectPet, uid }: PetTabsProps) {
@@ -25,14 +28,26 @@ export function PetTabs({ pets, selectedPetId, onSelectPet, uid }: PetTabsProps)
           </Tab>
         ))}
       </TabList>
-      <TabPanels>
-        {pets.map((pet) => (
-          <TabPanel key={pet.id} id={pet.id} className={panelClass}>
-            <PetPanel pet={pet} uid={uid} />
-          </TabPanel>
-        ))}
-      </TabPanels>
+      <EasedPanels>
+        <TabPanels>
+          {pets.map((pet) => (
+            <TabPanel key={pet.id} id={pet.id} className={panelClass}>
+              <PetPanel pet={pet} uid={uid} />
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </EasedPanels>
     </Tabs>
+  );
+}
+
+function EasedPanels({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { height, ready } = useEasedHeight(ref);
+  return (
+    <motion.div className={ready ? "overflow-hidden" : undefined} style={ready ? { height } : undefined}>
+      <div ref={ref}>{children}</div>
+    </motion.div>
   );
 }
 
@@ -41,8 +56,10 @@ function PetPanel({ pet, uid }: PetPanelProps) {
   return (
     <>
       <PetIntro pet={pet} />
-      <PlanBody planQuery={planQuery} />
-      <ClinicInbox uid={uid} petId={pet.id} />
+      <div className="grid items-start gap-xl md:grid-cols-2 *:min-w-0">
+        <PlanBody planQuery={planQuery} />
+        <ClinicInbox uid={uid} petId={pet.id} />
+      </div>
     </>
   );
 }
@@ -55,12 +72,14 @@ function PetIntro({ pet }: { pet: HomePet }) {
       : `${new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(pet.weight)} kg`;
   const details = [weight, pet.age === null ? null : `${pet.age} anos`].filter((part) => part !== null);
   return (
-    <header className="flex flex-col items-center gap-xs text-center">
+    <header className="flex flex-col items-start gap-xs">
       <h2 className="font-inter text-heading-1 text-balance text-text-primary">
         {pet.breed ? `${pet.name} (${pet.breed})` : pet.name}
       </h2>
       {details.length > 0 ? (
-        <p className="font-inter text-subtitle text-text-primary">{details.join(" · ")}</p>
+        <p className="font-inter text-subtitle text-pretty text-text-primary tabular-nums">
+          {details.join(" · ")}
+        </p>
       ) : null}
     </header>
   );

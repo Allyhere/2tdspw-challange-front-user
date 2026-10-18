@@ -22,7 +22,7 @@ export function HomePage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto flex w-full max-w-shell flex-col gap-xl px-lg py-xl">
+      <main className="mx-auto flex w-full max-w-dashboard flex-col gap-xl px-lg py-xl">
         <HomeTreatment
           tutor={tutor}
           ownerQuery={ownerQuery}

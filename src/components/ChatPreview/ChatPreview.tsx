@@ -110,7 +110,7 @@ function ConversationLink({ item }: ConversationLinkProps) {
       </p>
       {item.lastMessage ? (
         <time
-          className="font-inter text-caption text-text-primary"
+          className="font-inter text-caption text-text-primary tabular-nums"
           dateTime={item.lastMessage.sentAt}
         >
           {formatDateTime(item.lastMessage.sentAt)}

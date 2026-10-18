@@ -1,100 +1,90 @@
-import { Button, Link, Menu, MenuItem, MenuTrigger, Popover, Separator } from "react-aria-components";
+import { Button, Link } from "react-aria-components";
 import { useLocation } from "react-router-dom";
+import pageWash from "@/assets/page-wash.png";
 import vetiLogo from "@/assets/veti-logo.png";
 import { useAuth } from "@/auth/useAuth/useAuth";
-import { menuButtonClass, menuItemClass } from "@/styles/controls/controls.constants";
 
 export function AppHeader() {
   return (
-    <header>
+    <header className="sticky top-0 z-10 px-md pt-md pb-sm md:px-lg md:pt-lg md:pb-2xl">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-primary-light" aria-hidden="true">
+        <img
+          src={pageWash}
+          alt=""
+          width={460}
+          height={460}
+          className="absolute top-0 left-0 h-screen w-screen max-w-none object-cover opacity-40"
+        />
+      </div>
       <nav
         aria-label="Principal"
-        className="mx-auto flex w-full max-w-shell items-center justify-between px-lg py-sm"
+        className="relative mx-auto flex w-full max-w-dashboard flex-col gap-sm rounded-panel bg-surface-base p-sm shadow-floating md:flex-row md:items-center md:gap-lg md:px-md"
       >
-        <Link
-          href="/home"
-          aria-label="Veti"
-          className="inline-flex min-h-touch items-center outline-none data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
-        >
-          <img src={vetiLogo} alt="Veti" width={523} height={230} className="h-logo w-auto" />
-        </Link>
-        <NavMenu />
+        <div className="flex items-center justify-between gap-md md:contents">
+          <HomeLink />
+          <SignOutButton />
+        </div>
+        <SiteLinks />
       </nav>
     </header>
   );
 }
 
-function NavMenu() {
-  const { signOut } = useAuth();
+function HomeLink() {
+  return (
+    <Link
+      href="/home"
+      aria-label="Veti"
+      className="inline-flex min-h-touch shrink-0 items-center outline-none transition-nav data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark"
+    >
+      <img src={vetiLogo} alt="" width={523} height={230} className="h-logo w-auto" />
+    </Link>
+  );
+}
+
+function SiteLinks() {
   const { pathname } = useLocation();
   const plan = pathname === "/home" || pathname.startsWith("/conversation");
   const config = pathname === "/config" || pathname === "/notification";
 
   return (
-    <MenuTrigger>
-      <MenuButton />
-      <Popover placement="bottom end" className={menuPopoverClass}>
-        <Menu className="flex flex-col gap-xs outline-none">
-          <MenuItem
-            href="/home"
-            aria-current={plan ? "page" : undefined}
-            className={plan ? currentItemClass : menuItemClass}
-          >
-            Plano
-          </MenuItem>
-          <MenuItem
-            href="/config"
-            aria-current={config ? "page" : undefined}
-            className={config ? currentItemClass : menuItemClass}
-          >
-            Configurações
-          </MenuItem>
-          <Separator className="mx-sm my-xs h-px border-0 bg-border-divider" />
-          <MenuItem onAction={signOut} className={menuItemClass}>
-            Sair
-          </MenuItem>
-        </Menu>
-      </Popover>
-    </MenuTrigger>
+    <ul className="flex min-w-0 items-center gap-xs rounded-pill bg-primary-light p-xs md:order-2 md:w-fit">
+      <li className="min-w-0 flex-1 md:flex-none">
+        <NavLink href="/home" current={plan} label="Plano" />
+      </li>
+      <li className="min-w-0 flex-1 md:flex-none">
+        <NavLink href="/config" current={config} label="Configurações" />
+      </li>
+    </ul>
   );
 }
 
-function MenuButton() {
+function NavLink({ href, current, label }: { href: string; current: boolean; label: string }) {
   return (
-    <Button aria-label="Menu" className={menuButtonClass}>
-      <span className="grid size-icon">
-        <svg
-          viewBox="0 0 18 18"
-          aria-hidden="true"
-          className="col-start-1 row-start-1 size-icon opacity-100 blur-none transition-icon group-aria-expanded:scale-icon-hidden group-aria-expanded:opacity-0 group-aria-expanded:blur-xs"
-        >
-          <path
-            d="M3 5h12M3 9h12M3 13h12"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
-        <svg
-          viewBox="0 0 18 18"
-          aria-hidden="true"
-          className="col-start-1 row-start-1 size-icon scale-icon-hidden opacity-0 blur-xs transition-icon group-aria-expanded:scale-100 group-aria-expanded:opacity-100 group-aria-expanded:blur-none"
-        >
-          <path
-            d="M5 5l8 8M13 5l-8 8"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
-      </span>
+    <Link
+      href={href}
+      aria-current={current ? "page" : undefined}
+      className={current ? currentLinkClass : linkClass}
+    >
+      {label}
+    </Link>
+  );
+}
+
+function SignOutButton() {
+  const { signOut } = useAuth();
+  return (
+    <Button type="button" onPress={signOut} className={signOutClass}>
+      Sair
     </Button>
   );
 }
 
-const menuPopoverClass =
-  "w-menu origin-top-right rounded-md bg-surface-base p-xs shadow-floating outline-none data-entering:animate-menu-enter data-exiting:animate-menu-exit";
+const linkClass =
+  "inline-flex min-h-touch w-full items-center justify-center rounded-full px-md font-roboto text-label text-text-primary outline-none transition-nav data-hovered:text-primary-dark data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:w-auto";
 
-const currentItemClass = `${menuItemClass} bg-primary-light`;
+const currentLinkClass =
+  "inline-flex min-h-touch w-full items-center justify-center rounded-full bg-surface-base px-md font-roboto text-label text-primary shadow-subtle outline-none transition-nav data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:w-auto";
+
+const signOutClass =
+  "inline-flex min-h-touch shrink-0 cursor-pointer items-center rounded-pill px-lg font-roboto text-label text-text-primary outline-none transition-nav data-hovered:bg-primary-light data-pressed:scale-press data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-primary-dark md:order-3 md:ml-auto";

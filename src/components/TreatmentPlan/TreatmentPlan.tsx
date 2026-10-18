@@ -67,7 +67,7 @@ function TreatmentItemRow({ item }: { item: TreatmentAppointment }) {
           </p>
         ) : null}
       </div>
-      <p className="shrink-0 text-end font-inter text-caption whitespace-nowrap text-text-primary/30">
+      <p className="shrink-0 text-end font-inter text-caption whitespace-nowrap text-text-primary/30 tabular-nums">
         {formatDateTime(item.appointmentDate)}
       </p>
     </li>

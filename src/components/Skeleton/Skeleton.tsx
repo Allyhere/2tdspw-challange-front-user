@@ -1,17 +1,13 @@
-import type {
-  CenteredLinesProps,
-  LoadingStatusProps,
-} from "@/components/Skeleton/Skeleton.types";
+import type { LoadingStatusProps } from "@/components/Skeleton/Skeleton.types";
 
-const boneClass =
-  "block animate-pulse rounded-sm bg-image-placeholder motion-reduce:animate-none";
+const pulseClass = "block animate-pulse bg-image-placeholder motion-reduce:animate-none";
+const boneClass = `${pulseClass} rounded-sm`;
 
 export function ProfileSkeleton() {
   return (
     <LoadingStatus label="Carregando seus dados…">
-      <CenteredLines titleClass="w-1/2" detailClass="w-2/3" />
-      <CenteredLines titleClass="w-2/5" detailClass="w-1/2" />
-      <PlanSkeletonBody />
+      <ProfileBone />
+      <FeatureBone />
     </LoadingStatus>
   );
 }
@@ -33,11 +29,29 @@ function LoadingStatus({ label, children }: LoadingStatusProps) {
   );
 }
 
-function CenteredLines({ titleClass, detailClass }: CenteredLinesProps) {
+function ProfileBone() {
   return (
-    <div aria-hidden="true" className="flex flex-col items-center gap-xs">
-      <span className={`${boneClass} h-xl ${titleClass}`} />
-      <span className={`${boneClass} h-lg ${detailClass}`} />
+    <div aria-hidden="true" className="flex items-center gap-lg">
+      <span className={`${pulseClass} size-avatar shrink-0 rounded-full`} />
+      <div className="flex min-w-0 flex-1 flex-col gap-xs">
+        <span className={`${boneClass} h-xl w-2/5`} />
+        <span className={`${boneClass} h-lg w-3/5`} />
+      </div>
+    </div>
+  );
+}
+
+function FeatureBone() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex flex-col gap-xl rounded-md bg-surface-base p-lg shadow-floating md:p-xl"
+    >
+      <span className={`${pulseClass} h-touch rounded-panel`} />
+      <div className="grid gap-xl md:grid-cols-2">
+        <PlanSkeletonBody />
+        <PlanSkeletonBody />
+      </div>
     </div>
   );
 }
