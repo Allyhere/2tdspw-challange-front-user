@@ -29,3 +29,7 @@ Never create a component that returns only a styled element. Write the element a
 ## Utilities
 
 Write a single-line helper at the call site. Put any longer helper in `src/utils`.
+
+## Hooks
+
+Put React hooks in `src/hooks`.

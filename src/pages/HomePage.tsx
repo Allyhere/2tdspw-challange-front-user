@@ -10,7 +10,7 @@ import {
 import { offlineQueryOptions } from "@/lib/persist/offlineQuery";
 import { usePetSelection } from "@/lib/persist/selectedPet";
 import { usePageTitle } from "@/lib/usePageTitle";
-import { HomeTreatment } from "@/pages/HomeTreatment";
+import { HomeTreatment } from "@/components/HomeTreatment/HomeTreatment";
 import { requiredPetId } from "@/utils/requiredPetId";
 
 export function HomePage() {

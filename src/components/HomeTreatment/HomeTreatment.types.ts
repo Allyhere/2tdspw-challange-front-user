@@ -13,17 +13,3 @@ export type HomeTreatmentProps = {
   onSelectPet: (petId: string) => void;
   planQuery: UseQueryResult<TreatmentPlanData>;
 };
-
-export type OwnerStatusProps = {
-  tutor: AuthUser | null;
-  message: string;
-};
-
-export type PlanBodyProps = {
-  planQuery: UseQueryResult<TreatmentPlanData>;
-};
-
-export type LoadErrorProps = {
-  message: string;
-  onRetry: () => void;
-};

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { MessageList } from "@/components/MessageList/MessageList";
 import { useAuth } from "@/auth/useAuth/useAuth";
-import { useSendMessage } from "@/data/clinicChat/useSendMessage";
+import { useSendMessage } from "@/hooks/useSendMessage";
 import { useThread } from "@/data/clinicChat/useConversation";
 import { withPendingMessage } from "@/data/clinicChat/withPendingMessage";
 import { ApiError } from "@/lib/api/api.types";
