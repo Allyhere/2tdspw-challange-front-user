@@ -16,6 +16,13 @@ export function formatDateTime(iso: string): string {
   }).format(new Date(iso));
 }
 
+export function formatMessageTime(iso: string): string {
+  return new Intl.DateTimeFormat("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
+
 export function formatSilenceUntil(iso: string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
